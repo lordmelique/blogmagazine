@@ -6,7 +6,16 @@
  *
  * @package Blog_Magazine
  */
+define('BMAG_TITLE','Blog Magazine');
+define('BMAG_SLUG','blog-magazine');
+define('BMAG_VAR','blog_magazine');
 
+/*directories*/
+define("BMAG_DIR", get_template_directory());
+/*URLs*/
+define("BMAG_URL", get_template_directory_uri());
+
+require_once('inc/index.php');
 if ( ! function_exists( 'bmag_setup' ) ) :
 /**
  * Sets up theme defaults and registers support for various WordPress features.
