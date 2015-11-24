@@ -13,5 +13,6 @@ class BMAGViewThemePage_bmag{
 		?>
 		<h3>Theme Page</h3>
 		<?php
+		
 	}
 }

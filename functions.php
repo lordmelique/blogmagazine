@@ -10,6 +10,7 @@ define('BMAG_TITLE','Blog Magazine');
 define('BMAG_SLUG','blog-magazine');
 define('BMAG_VAR','blog_magazine');
 
+
 /*directories*/
 define("BMAG_DIR", get_template_directory());
 /*URLs*/
