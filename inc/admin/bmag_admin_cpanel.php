@@ -61,8 +61,8 @@ function bmag_register_settings(){
 				'bmag_' . $tabname . '_tab'
 			);
 		}
-	}
 
+	}
 	//registering settings fields
 	$all_settings = bmag_get_all_settings();
 	foreach ($all_settings as $setting) {
@@ -72,7 +72,7 @@ function bmag_register_settings(){
 			$settingtab     = $setting['tab'];
 			$settingtype    = $setting['type'];
 			$settingsection = $setting['section'];
-
+			
 			if( 'custom' != $settingtype ){
 				add_settings_field( 
 				 	// String for use in the 'id' attribute of tags.
@@ -87,7 +87,7 @@ function bmag_register_settings(){
 				 	'bmag_' . $settingtab . '_tab',
 				 	/* The section of the settings page in which to show the box (default or a section you added with add_settings_section(),
 				 	   look at the page in the source to see what the existing ones are.) */
-				 	'bamg_' . $settingname . '_section',
+				 	'bmag_' . $settingsection . '_section',
 				 	// Additional arguments that are passed to the $callback function.
 				 	$setting 
 				);
@@ -105,7 +105,7 @@ function bmag_register_settings(){
 			 	'bmag_' . $settingtab . '_tab',
 			 	/* The section of the settings page in which to show the box (default or a section you added with add_settings_section(),
 			 	   look at the page in the source to see what the existing ones are.) */
-			 	'bamg_' . $settingname . '_section'
+			 	'bmag_' . $settingsection . '_section'
 			);
 			}
 		} 
@@ -178,4 +178,17 @@ function bmag_tab_descr( $tabname ){
 	}
 }
 
+/**
+ * Callback function for settings sections
+ */
+function bmag_section_callback(){
+
+}
+
+/**
+ * Callback function for settings fields
+ */
+function bmag_field_callback(){
+
+}
 ?>

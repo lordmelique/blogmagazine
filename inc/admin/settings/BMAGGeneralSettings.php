@@ -15,7 +15,7 @@ class BMAGGeneralSettings{
 	        'description' => __( 'This is demo option 1', 'bmag' ), 
 	        'show' => array(),
 	        'hide' => array(),
-	        'section' => 'general_main', 
+	        'section' => 'demo_section', 
 	        'tab' => $this->settings_tab, 
 	        'default' => false,
 	        'customizer' => array()
@@ -37,7 +37,7 @@ class BMAGGeneralSettings{
 	          "right-middle"  =>  "right-middle",
 	          "right-bottom"  =>  "right-bottom"   
 	        ),
-	        'section' => 'general_main',
+	        'section' => 'demo_section',
 	        'tab' => $this->settings_tab,
 	        'default' => array('right-top'),
 	        'customizer' => array() 
