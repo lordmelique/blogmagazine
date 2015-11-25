@@ -15,9 +15,10 @@ class BMAGControllerThemePage_bmag {
   */
   //TODO fix nonce problem
   public function execute() {
-    $task = WDILibrary::get('task');
-    $message = WDILibrary::get('message');
-    echo WDILibrary::message_id($message);
+   
+    $task = BMAGLibrary::get('task');
+    $message = BMAGLibrary::get('message');
+    echo BMAGLibrary::message_id($message);
     if (method_exists($this, $task)) {
       check_admin_referer('nonce_bmag', 'nonce_bmag');
       $this->$task($id);

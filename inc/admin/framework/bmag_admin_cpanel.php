@@ -7,6 +7,7 @@ add_action( 'admin_init', 'bmag_register_settings' );
  * Creates Theme menu page
  */ 
 function bmag_add_theme_page() {
+
 	$menu = add_theme_page(
 			 /* The text to be displayed in the title tags of the page when the menu is selected. */
 			 BMAG_TITLE,
@@ -26,11 +27,11 @@ function bmag_add_theme_page() {
  * Callback function for rendering theme page
  */
 function bmag_theme_page_callback() {
-	require_once(BMAG_DIR . '/inc/admin/framework/BMAGLibrary.php');
-	$controller_class = "BMAGControllerThemePage_bmag";
-	require_once(BMAG_DIR . '/inc/admin/mvc/controllers/' . $controller_class . '.php');
-	$controller = new $controller_class();
-	$controller->execute();
+	// require_once(BMAG_DIR . '/inc/admin/framework/BMAGLibrary.php');
+	// $controller_class = "BMAGControllerThemePage_bmag";
+	// require_once(BMAG_DIR . '/inc/admin/mvc/controllers/' . $controller_class . '.php');
+	// $controller = new $controller_class();
+	// $controller->execute();
 }
 
 
@@ -38,6 +39,22 @@ function bmag_theme_page_callback() {
  * Registers theme settings
  */
 function bmag_register_settings(){
+
+	global $bmag_tabs;
+	//registering setting
+	register_setting( 'bmag_options', 'theme_' . BMAG_VAR . '_options', 'bmag_options_sanitizer' );
+	
+	//registering settings sections
+	$bmag_tabs = bmag_get_tabs();
+	
+	foreach ($bmag_tabs as $tab) {
+		$tabname = $tab['name'];
+		$sections = $tab['sections'];
+		foreach ($sections as $section) {
+			
+
+		}
+	}
 
 }
 
