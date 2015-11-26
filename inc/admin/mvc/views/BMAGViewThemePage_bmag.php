@@ -17,6 +17,8 @@ class BMAGViewThemePage_bmag{
 			<?php
 			settings_fields('bmag_options'); 
 		    bmag_do_settings_sections( 'bmag_general_tab' );
+		    bmag_do_settings_sections( 'bmag_home_tab' );
+
 			submit_button();
 			 ?>
 		</form>

@@ -143,6 +143,23 @@ function bmag_get_tabs(){
 	   ),
 	  'description' => bmag_tab_descr('general')
 	);
+	$tabs['home'] = array(
+	    'name' => 'home',
+	    'title' => __( 'Home', 'bmag' ),
+	    'sections' => array(
+	      'home_section' => array(
+	        'name' => 'home_section',
+	        'title' => __( 'Demo Section', 'bmag' ),
+	        'description' => 'Demo Description'
+	      ),
+	      'home_section2' => array(
+	        'name' => 'home_section2',
+	        'title' => __( 'Demo Section 2', 'bmag' ),
+	        'description' => 'Demo Description'
+	      )
+	   ),
+	  'description' => bmag_tab_descr('home')
+	);
 	return apply_filters( 'bmag_get_tabs', $tabs );
 }
 
@@ -157,6 +174,10 @@ function bmag_get_all_settings(){
 
 	require_once( BMAG_DIR . '/inc/admin/settings/BMAGGeneralSettings.php' );
   	$settings_by_tabs['general'] = new BMAGGeneralSettings();
+
+	require_once( BMAG_DIR . '/inc/admin/settings/BMAGHomeSettings.php' );
+  	$settings_by_tabs['home'] = new BMAGHomeSettings();
+
 
   	foreach ( $settings_by_tabs as $tab ) {
   		foreach ( $tab->options as $option => $value ) {
@@ -175,6 +196,10 @@ function bmag_tab_descr( $tabname ){
 	switch ( $tabname ){
 		case 'general':{
 			return __('This is demo description for general tab','bmag');
+			break;
+		}
+		case 'home':{
+			return __('This is demo description for home tab','bmag');
 			break;
 		}
 		default:{
