@@ -41,7 +41,7 @@ function bmag_register_settings(){
 
 	global $bmag_tabs;
 	//registering setting
-	register_setting( 'bmag_options', 'theme_' . BMAG_VAR . '_options', 'bmag_options_sanitizer' );
+	register_setting( 'bmag_options', 'theme_' . BMAG_VAR . '_options', 'bmag_options_validate' );
 	
 	//registering settings sections
 	$bmag_tabs = bmag_get_tabs();
@@ -134,6 +134,11 @@ function bmag_get_tabs(){
 	        'name' => 'demo_section',
 	        'title' => __( 'Demo Section', 'bmag' ),
 	        'description' => 'Demo Description'
+	      ),
+	      'demo_section2' => array(
+	        'name' => 'demo_section2',
+	        'title' => __( 'Demo Section 2', 'bmag' ),
+	        'description' => 'Demo Description'
 	      )
 	   ),
 	  'description' => bmag_tab_descr('general')
@@ -188,7 +193,133 @@ function bmag_section_callback(){
 /**
  * Callback function for settings fields
  */
-function bmag_field_callback(){
+function bmag_field_callback($option){
+	
+	$value = get_option( BMAG_OPT,'asda');
 
+	$optionname = BMAG_OPT.'[' .$option['name']. ']';
+	$val = isset($value[$option['name']]) ? $value[$option['name']] : 'no opt';
+
+	if($option['type'] == 'checkbox'){
+		?><input type="checkbox" <?php checked($val || $val =='on'); ?> name="<?php echo $optionname;?>"> <?php
+	}else{
+		
+		?> <input type="text" value="<?php echo $val?>" name='<?php echo $optionname; ?>'> <?php
+	}
 }
+
+
+/**
+ * Validates all settings getted from settings form
+ *
+ * If any option is not valid replaces option with it's default
+ * Then returns validated options with bmag_sanitize_options hook attached
+ *
+ * @param $options
+ * @return $options
+ *
+ */
+function bmag_options_validate( $options ){
+
+	return apply_filters( 'bmag_sanitize_options', $options );
+}
+
+/**
+ * Salitizes all settings getted from bmag_option_validate() function
+ *
+ * If any option is not valid replaces option with it's default
+ * 
+ * @param $options
+ * @return $options
+ *
+ */
+function bmag_options_sanitizer( $options ){
+
+	return $options;
+}
+add_filter('bmag_sanitize_options', 'bmag_options_sanitizer');
+
+
+
+/**
+ * Prints out all settings sections added to a particular settings page
+ *
+ * This is a modified version of its analog do_settings_sections from Settings API
+ *
+ * Use this in a settings page callback function
+ * to output all the sections and fields that were added to that $page with
+ * add_settings_section() and add_settings_field()
+ *
+ * @global $wp_settings_sections Storage array of all settings sections added to admin pages
+ * @global $wp_settings_fields Storage array of settings fields and info about their pages/sections
+ * @since 2.7.0
+ *
+ * @param string $page The slug name of the page whos settings sections you want to output
+ */
+function bmag_do_settings_sections( $page ) {
+	global $wp_settings_sections, $wp_settings_fields;
+
+	if ( ! isset( $wp_settings_sections[$page] ) )
+		return;
+
+	foreach ( (array) $wp_settings_sections[$page] as $section ) {
+		if ( $section['title'] )
+			echo "<h1>{$section['title']}</h1>\n";
+
+		if ( $section['callback'] )
+			call_user_func( $section['callback'], $section );
+
+		if ( ! isset( $wp_settings_fields ) || !isset( $wp_settings_fields[$page] ) || !isset( $wp_settings_fields[$page][$section['id']] ) )
+			continue;
+		echo '<div class="form-table melik">';
+		bmag_do_settings_fields( $page, $section['id'] );
+		echo '</div>';
+	}
+}
+
+
+
+/**
+ * Print out the settings fields for a particular settings section
+ *
+ * This is a modified version of its analog do_settings_fields from Settings API
+ *
+ * Use this in a settings page to output
+ * a specific section. Should normally be called by bmag_do_settings_sections()
+ * rather than directly.
+ *
+ * @global $wp_settings_fields Storage array of settings fields and their pages/sections
+ *
+ * @since 2.7.0
+ *
+ * @param string $page Slug title of the admin page who's settings fields you want to show.
+ * @param string $section Slug title of the settings section who's fields you want to show.
+ */
+function bmag_do_settings_fields($page, $section) {
+	global $wp_settings_fields;
+	if ( ! isset( $wp_settings_fields[$page][$section] ) )
+		return;
+
+	foreach ( (array) $wp_settings_fields[$page][$section] as $field ) {
+		$class = '';
+
+		if ( ! empty( $field['args']['class'] ) ) {
+			$class = ' class="' . esc_attr( $field['args']['class'] ) . '"';
+		}
+
+		echo "<div{$class}>";
+
+		if ( ! empty( $field['args']['label_for'] ) ) {
+			echo '<div scope="row"><label for="' . esc_attr( $field['args']['label_for'] ) . '">' . $field['title'] . '</label></div>';
+		} else {
+			echo '<div scope="row">' . $field['title'] . '</div>';
+		}
+
+		echo '<div>';
+		call_user_func($field['callback'], $field['args']);
+		echo '</div>';
+		echo '</div>';
+	}
+}
+
 ?>

@@ -37,7 +37,7 @@ class BMAGGeneralSettings{
 	          "right-middle"  =>  "right-middle",
 	          "right-bottom"  =>  "right-bottom"   
 	        ),
-	        'section' => 'demo_section',
+	        'section' => 'demo_section2',
 	        'tab' => $this->settings_tab,
 	        'default' => array('right-top'),
 	        'customizer' => array() 
