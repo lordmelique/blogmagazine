@@ -281,25 +281,37 @@ add_filter('bmag_sanitize_options', 'bmag_options_sanitizer');
  *
  * @param string $page The slug name of the page whos settings sections you want to output
  */
-function bmag_do_settings_sections( $page ) {
+function bmag_do_settings_sections( $page , $display = '') {
 	global $wp_settings_sections, $wp_settings_fields;
 
 	if ( ! isset( $wp_settings_sections[$page] ) )
 		return;
 
+	if($display == 'active'){
+		$active_class = 'bmag_active';
+	}else{
+		$active_class = '';
+	}
+
+
+	echo "<div class='bmag_settings_tab " . $active_class . "' tab='" . $page . "'>";
 	foreach ( (array) $wp_settings_sections[$page] as $section ) {
+		
 		if ( $section['title'] )
-			echo "<h1>{$section['title']}</h1>\n";
+			echo "<div class='bmag_settings_section'><h1 class='bmag_section_title'>{$section['title']}</h1>\n";
 
 		if ( $section['callback'] )
 			call_user_func( $section['callback'], $section );
 
-		if ( ! isset( $wp_settings_fields ) || !isset( $wp_settings_fields[$page] ) || !isset( $wp_settings_fields[$page][$section['id']] ) )
+		if ( ! isset( $wp_settings_fields ) || !isset( $wp_settings_fields[$page] ) || !isset( $wp_settings_fields[$page][$section['id']] ) ){
+			echo "</div>"; /* Closing div for <div class='bmag_settings_section'> in case of continuing loop */
 			continue;
-		echo '<div class="form-table melik">';
+		}
+		echo "<div class='bmag_settings_fields'>";
 		bmag_do_settings_fields( $page, $section['id'] );
-		echo '</div>';
+		echo "</div></div>";
 	}
+	echo "</div>";
 }
 
 
@@ -330,17 +342,19 @@ function bmag_do_settings_fields($page, $section) {
 
 		if ( ! empty( $field['args']['class'] ) ) {
 			$class = ' class="' . esc_attr( $field['args']['class'] ) . '"';
+		}else{
+			$class = ' class="bmag_settings_field"';
 		}
 
 		echo "<div{$class}>";
 
 		if ( ! empty( $field['args']['label_for'] ) ) {
-			echo '<div scope="row"><label for="' . esc_attr( $field['args']['label_for'] ) . '">' . $field['title'] . '</label></div>';
+			echo '<div class="bmag_field_title"><label for="' . esc_attr( $field['args']['label_for'] ) . '">' . $field['title'] . '</label></div>';
 		} else {
-			echo '<div scope="row">' . $field['title'] . '</div>';
+			echo '<div class="bmag_field_title">' . $field['title'] . '</div>';
 		}
 
-		echo '<div>';
+		echo '<div class="bmag_field_content">';
 		call_user_func($field['callback'], $field['args']);
 		echo '</div>';
 		echo '</div>';
