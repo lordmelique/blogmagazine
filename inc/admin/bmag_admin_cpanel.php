@@ -2,6 +2,7 @@
 
 add_action( 'admin_menu', 'bmag_add_theme_page' );
 add_action( 'admin_init', 'bmag_register_settings' );
+add_action( 'admin_enqueue_scripts', 'bmag_admin_enqueue_scripts' );
 
 /**
  * Creates Theme menu page
@@ -19,7 +20,6 @@ function bmag_add_theme_page() {
 			 /* The function to be called to output the content for this page. */
 			 'bmag_theme_page_callback'
 			 );
-	add_action( 'admin_print_styles' . $menu, 'bmag_admin_scripts' );
 }
 
 /**
@@ -112,11 +112,13 @@ function bmag_register_settings(){
 	}
 }
 
-/**
- * Function where should be enqueued admin script and styles
- */
-function bmag_admin_scripts() {
 
+
+/**
+ * Function where should be enqueued admin styles and scripts
+ */
+function bmag_admin_enqueue_scripts() {
+	wp_enqueue_style( 'bmag-font-awesome', BMAG_URL . '/inc/css/font-awesome/font-awesome.css');
 }
 
 /**
@@ -141,6 +143,7 @@ function bmag_get_tabs(){
 	        'description' => 'Demo Description'
 	      )
 	   ),
+	  'icon' => 'fa fa-cogs',
 	  'description' => bmag_tab_descr('general')
 	);
 	$tabs['home'] = array(
@@ -158,6 +161,7 @@ function bmag_get_tabs(){
 	        'description' => 'Demo Description'
 	      )
 	   ),
+	   'icon' => 'fa fa-home',
 	  'description' => bmag_tab_descr('home')
 	);
 	return apply_filters( 'bmag_get_tabs', $tabs );
@@ -226,7 +230,9 @@ function bmag_field_callback($option){
 	$val = isset($value[$option['name']]) ? $value[$option['name']] : 'no opt';
 
 	if($option['type'] == 'checkbox'){
-		?><input type="checkbox" <?php checked($val || $val =='on'); ?> name="<?php echo $optionname;?>"> <?php
+		?><input type="checkbox" <?php checked($val || $val =='on'); ?> id="dd_<?php echo $optionname;?>" name="<?php echo $optionname;?>">
+			<label for="dd_<?php echo $optionname;?>"><?php echo $option['description'] ?></label>
+		 <?php
 	}else{
 		
 		?> <input type="text" value="<?php echo $val?>" name='<?php echo $optionname; ?>'> <?php
@@ -349,9 +355,9 @@ function bmag_do_settings_fields($page, $section) {
 		echo "<div{$class}>";
 
 		if ( ! empty( $field['args']['label_for'] ) ) {
-			echo '<div class="bmag_field_title"><label for="' . esc_attr( $field['args']['label_for'] ) . '">' . $field['title'] . '</label></div>';
+			echo '<h4 class="bmag_field_title"><label for="' . esc_attr( $field['args']['label_for'] ) . '">' . $field['title'] . '</label></h4>';
 		} else {
-			echo '<div class="bmag_field_title">' . $field['title'] . '</div>';
+			echo '<h4 class="bmag_field_title">' . $field['title'] . '</h4>';
 		}
 
 		echo '<div class="bmag_field_content">';
