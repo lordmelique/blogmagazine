@@ -152,7 +152,7 @@ class BMAGViewThemePage_bmag{
 			}
 			.bmag_nav_tab_current{
 				margin-right: 0;
-				background-color: white;
+				background-color: #FCFCFC;
 			}
 			.bmag_nav_tab span,
 			.bmag_nav_tab h3{
@@ -200,9 +200,9 @@ class BMAGViewThemePage_bmag{
 			.bmag_settings_section .bmag_section_title{
 				padding: 15px 10px;
 			    line-height: 1.2em;
-			    background-color: #E7E6E6;
+			    background-color: #f1f1f1;
 			    border: 1px solid #D0D0D0;
-			    color: #9D9D9D;
+			    color: #797979;
 			    overflow: hidden;
 			}
 			.bmag_field_title{
@@ -228,8 +228,6 @@ class BMAGViewThemePage_bmag{
 			    box-shadow: inset 0 1px 0 #fff;
 			}
 
-
-			
 
 			@media screen and (min-width: 0px) and (max-width: 610px){
 				.bmag_header{
