@@ -9,7 +9,8 @@
 define('BMAG_TITLE','Blog Magazine');
 define('BMAG_SLUG','blog-magazine');
 define('BMAG_VAR','blog_magazine');
-define("BMAG_OPT",'theme_'.BMAG_VAR.'_options');
+define("BMAG_OPT",'theme_' . BMAG_VAR . '_options');
+define("BMAG_VERSION",wp_get_theme()->get('Version'));
 
 /*directories*/
 define("BMAG_DIR", get_template_directory());

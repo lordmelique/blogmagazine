@@ -10,9 +10,9 @@ class BMAGHomeSettings{
 
 	      	'home_option1' => array( 
 	        'name' => 'home_option1', 
-	        'title' => __( 'Custom CSS', 'bmag' ), 
+	        'title' => __( 'Home option', 'bmag' ), 
 	        'type' => 'checkbox', 
-	        'description' => __( 'This is demo option 1', 'bmag' ), 
+	        'description' => __( 'This is home 1', 'bmag' ), 
 	        'show' => array(),
 	        'hide' => array(),
 	        'section' => 'home_section', 
@@ -23,7 +23,7 @@ class BMAGHomeSettings{
 
 	      	'home_option2' => array(
 	        "name" => "home_option2",
-	        "title" => __("This is demo option 2", 'bmag' ),
+	        "title" => __("This is home option 2", 'bmag' ),
 	        'type' => 'select',
 	        "description" => "",
 	        "valid_options" => array(
@@ -39,7 +39,7 @@ class BMAGHomeSettings{
 	        ),
 	        'section' => 'home_section2',
 	        'tab' => $this->settings_tab,
-	        'default' => array('right-top'),
+	        'default' => 'aaaaa',
 	        'customizer' => array() 
 	      )
         );
