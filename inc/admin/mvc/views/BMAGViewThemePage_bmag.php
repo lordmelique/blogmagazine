@@ -4,14 +4,12 @@ class BMAGViewThemePage_bmag{
 	private $model;
 	public $tabs;
 	public $active_tab;
-	public $blog_magazine_theme;
 	public $links;
 	/*============Constructor===========*/
 	public function __construct($model){
 		$this->model = $model;
 		$this->tabs = $this->model->get_tabs();
 		$this->active_tab = 'general';
-		$this->blog_magazine_theme = wp_get_theme();
 
 		$this->links = array(
 		'documentation' => array(
@@ -165,6 +163,14 @@ class BMAGViewThemePage_bmag{
 			.bmag_tab_icon{
 				font-size: 1.3em;
 			}
+			.bmag_nav_tab:hover{
+				cursor: pointer;
+				background-color: #ededed;
+			}
+			.bmag_nav_tab_current:hover{
+				cursor: pointer;
+				background-color: #FCFCFC;
+			}
 
 
 
@@ -180,8 +186,22 @@ class BMAGViewThemePage_bmag{
 			    -moz-box-shadow: inset 0 1px 0 #fff;
 			    -webkit-box-shadow: inset 0 1px 0 #fff;
 			    box-shadow: inset 0 1px 0 #fff;
+
+			    -webkit-user-select: none; /* Chrome/Safari */        
+				-moz-user-select: none; /* Firefox */
+				-ms-user-select: none; /* IE10+ */
+
+				/* Rules below not implemented in browsers yet */
+				-o-user-select: none;
+				user-select: none;
 			}
 
+			.bmag_settings_tab{
+				display: none;
+			}
+			.bmag_active{
+				display: block;
+			}
 			.bmag_settings_section{
 				margin-bottom: 10px;
    				overflow: hidden;
@@ -191,6 +211,15 @@ class BMAGViewThemePage_bmag{
 			}
 			.bmag_settings_field{
 				margin-bottom: 10px;
+			}
+			.bmag_settings_fields{
+				display: none;
+			}
+			.bmag_settings_tab .bmag_settings_section:nth-child(1) .bmag_settings_fields{
+				display: block;
+			}
+			.bmag_settings_tab .bmag_settings_section:nth-child(1) .bmag_section_caret{
+				transform: rotate(90deg);
 			}
 			.bmag_settings_field label{
 			    padding: 0 10px 0 0;
@@ -204,6 +233,14 @@ class BMAGViewThemePage_bmag{
 			    border: 1px solid #D0D0D0;
 			    color: #797979;
 			    overflow: hidden;
+			}
+			.bmag_section_caret{
+				float: right;
+			    margin-right: 10px;
+			    line-height: 1.2em !important;
+			}
+			.bmag_section_title:hover{
+				cursor: pointer;
 			}
 			.bmag_field_title{
 				margin: 10px 0 10px 0;
@@ -255,11 +292,11 @@ class BMAGViewThemePage_bmag{
 			}
 
 		</style>
-		<div class="wrap">
+		<div class="wrap" id="bmag_theme_options">
 			<div class="bmag_header">
 				<div class="bmag_logo">
 					<h2> <?php _e('Blog Magazine','bmag') ?> </h2>
-					<span><?php echo $this->blog_magazine_theme->get('Version'); ?></span>
+					<span><?php echo BMAG_VERSION ?></span>
 				</div>
 				<div class="bmag_docs">
 					<a target="_blank" href="<?php echo $this->links['documentation']['link']; ?>" class="bmag_header_link"><?php echo $this->links["documentation"]["title"]; ?></a>
@@ -283,8 +320,11 @@ class BMAGViewThemePage_bmag{
 					<?php 
 						foreach ($this->tabs as $tab) {
 							$page = 'bmag_' . $tab['name'] . '_tab';
+							$active_class = ( $this->active_tab == $tab['name'] ) ? 'bmag_nav_tab_current' : '';
+
+
 							?>
-								<div id="<?php echo esc_attr( $page ); ?>" class="bmag_nav_tab">
+								<div id="<?php echo esc_attr( $page ); ?>" class="bmag_nav_tab <?php echo $active_class; ?>" onclick="bmag_admin_controller.switchTab('<?php echo esc_attr( $page ); ?>')">
 									<div class="bmag_nav_tab_wrap">
 										<span class="bmag_tab_icon <?php echo isset($tab['icon']) ? esc_attr( $tab['icon'] ) : ''; ?>"></span>
 										<h3 class="bmag_nav_tab_title"> <?php echo $tab['title'] ?> </h3>
@@ -296,8 +336,10 @@ class BMAGViewThemePage_bmag{
 				</div>
 				<div class="bmag_form_container">
 					<form id="bmag_settings_form" action="options.php" method="post">
+					<input type="hidden" id="bmag_current_tab" name="bmag_current_tab" value="bmag_<?php echo $this->active_tab; ?>_tab">
+					<input type="hidden" id="bmag_task" name="bmag_task" value="">
 					<?php
-						settings_fields('bmag_options'); 
+						
 					    foreach ( $this->tabs as $tab ) {
 					    	$page = 'bmag_' . $tab['name'] . '_tab';
 					    	if( $this->active_tab == $tab['name'] ){

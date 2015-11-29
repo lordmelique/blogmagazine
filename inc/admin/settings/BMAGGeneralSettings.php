@@ -39,7 +39,7 @@ class BMAGGeneralSettings{
 	        ),
 	        'section' => 'demo_section',
 	        'tab' => $this->settings_tab,
-	        'default' => array('right-top'),
+	        'default' => 'right-top',
 	        'customizer' => array() 
 	      )
         );

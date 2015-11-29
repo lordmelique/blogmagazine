@@ -4,6 +4,9 @@ add_action( 'admin_menu', 'bmag_add_theme_page' );
 add_action( 'admin_init', 'bmag_register_settings' );
 add_action( 'admin_enqueue_scripts', 'bmag_admin_enqueue_scripts' );
 
+
+add_action( 'wp_ajax_bmag_form_submit', 'bmag_form_submit_callback' );
+
 /**
  * Creates Theme menu page
  */ 
@@ -39,12 +42,14 @@ function bmag_theme_page_callback() {
  */
 function bmag_register_settings(){
 
-	global $bmag_tabs;
+	global $bmag_tabs,$bmag_tabnames,$bmag_defaults;
 	//registering setting
 	register_setting( 'bmag_options', 'theme_' . BMAG_VAR . '_options', 'bmag_options_validate' );
 	
 	//registering settings sections
 	$bmag_tabs = bmag_get_tabs();
+	$bmag_tabnames = bmag_get_tab_names();
+	$bmag_defaults = bmag_get_defaults();
 	foreach ($bmag_tabs as $tab) {
 		$tabname = $tab['name'];
 		$sections = $tab['sections'];
@@ -118,7 +123,14 @@ function bmag_register_settings(){
  * Function where should be enqueued admin styles and scripts
  */
 function bmag_admin_enqueue_scripts() {
+	wp_enqueue_script('jquery');
+	wp_enqueue_script( 'themepagecontroller', BMAG_URL . '/inc/js/themepagecontroller.js', array('jquery'), BMAG_VERSION);
+	wp_localize_script( 'themepagecontroller', 'bmag_admin', array(
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'bmag_nonce' => wp_create_nonce( 'bmag_submit_form_data' )
+		) );
 	wp_enqueue_style( 'bmag-font-awesome', BMAG_URL . '/inc/css/font-awesome/font-awesome.css');
+
 }
 
 /**
@@ -168,6 +180,19 @@ function bmag_get_tabs(){
 }
 
 /**
+ * Returns tabnames
+ */
+function bmag_get_tab_names(){
+	$bmag_tabs = bmag_get_tabs();
+	$tabnames = array();
+	foreach ($bmag_tabs as $tab) {
+		array_push($tabnames,$tab['name']);
+	}
+	return $tabnames;
+}
+
+
+/**
  * Collects settings from all tabs into single settings array
  * settings blueprints are located in admin/settings
  */
@@ -192,6 +217,17 @@ function bmag_get_all_settings(){
 	return apply_filters( 'bmag_get_all_settings', $settings );
 }
 
+/**
+ * Returns default values of all settings in name => value pairs
+ */
+function bmag_get_defaults(){
+	$settings = bmag_get_all_settings();
+	$defaults = array();
+	foreach ($settings as $setting) {
+		$defaults[$setting['name']] = $setting['default'];
+	}
+	return apply_filters( 'bmag_get_defaults', $defaults );
+}
 /**
  * @param $tabname
  * @return $tabdescription
@@ -384,7 +420,7 @@ function bmag_do_settings_sections( $page , $display = '') {
 	foreach ( (array) $wp_settings_sections[$page] as $section ) {
 		
 		if ( $section['title'] )
-			echo "<div class='bmag_settings_section'><h1 class='bmag_section_title'>{$section['title']}</h1>\n";
+			echo "<div class='bmag_settings_section'><h1 class='bmag_section_title'>{$section['title']}<span class='fa fa-chevron-right bmag_section_caret'></span></h1>\n";
 
 		if ( $section['callback'] )
 			call_user_func( $section['callback'], $section );
@@ -447,4 +483,137 @@ function bmag_do_settings_fields($page, $section) {
 	}
 }
 
-?>
+/**
+ * Ajax callback of options form
+ *
+ * Verifies nonce, then parses data and filters it based on @param $task
+ */
+function bmag_form_submit_callback(){
+	//verifing nonce
+	global $bmag_tabnames,$bmag_defaults;
+	//this should be done my global !!!!!!!!TODO
+	$bmag_options = get_option( BMAG_OPT );
+
+	$data = isset( $_POST['data'] ) ? $_POST['data'] : '';
+	if( ! isset( $_POST['nonce'] ) ){
+		wp_die('there are no nonce');
+	}
+	if ( ! wp_verify_nonce( $_POST['nonce'], 'bmag_submit_form_data' )){
+		wp_die('invalid nonce');
+	}
+
+	//parsing data
+	$strlen = strlen('theme_' . BMAG_VAR . '_options');
+	$settings = json_decode( stripcslashes( $data ) );
+	$options = array();
+	foreach ( $settings as $setting ) {
+		switch( $setting->name ){
+			case 'bmag_current_tab':{
+				$current_tab = $setting->value;
+				break;
+			}
+			case 'bmag_task':{
+				$task = $setting->value;
+				break;
+			}
+			default:{
+				$settingname = substr( $setting->name, $strlen + 1, strlen( $setting->name ) - $strlen - 2 );
+				$options[$settingname] = $setting->value;
+				break;
+			}
+		}
+	}
+	//removeing prefixes from tabname 'bmag_' . $tabname . '_tabs'
+	$current_tab = substr( $current_tab, 5, strlen( $current_tab ) - 9 );
+	if( isset( $task ) ){
+		if ( isset( $current_tab ) && in_array( $current_tab, $bmag_tabnames ) ){
+	
+			switch( $task ){
+				case 'save_tab':{
+					$options = bmag_filter_by_tab($options,$current_tab);
+					$options = wp_parse_args( $options, $bmag_options );
+					break;
+				}
+				case 'reset_tab': {
+					$defaults = bmag_filter_by_tab($bmag_defaults,$current_tab);
+					$options = wp_parse_args( $defaults, $options );
+					break;
+				}
+				case 'save_all': {
+					$options = wp_parse_args( $options, $bmag_defaults );
+					break;
+				}
+				case 'reset_all':{
+					$options = $bmag_defaults;
+					break;
+				}
+				default: {
+					echo json_encode( array( 
+									'error' => 'invalid_task',
+									'error_msg'=>'__("Something went wrong try reloading the page","bmag")'
+									));
+					wp_die();
+					break;
+				}
+			}	
+		}else{
+			switch( $task ){
+				case 'save_all':{
+					$options = wp_parse_args( $options, $bmag_defaults );
+					break;
+				}
+				case 'reset_all':{
+					$options = $bmag_defaults;
+					break;
+				}
+				default:{
+					echo json_encode( array( 
+						'error' => 'wrong_settings_tab',
+						'error_msg'=>'__("Something went wrong try reloading the page","bmag")'
+						));
+					wp_die();
+				}
+			}
+			
+		}
+	}else{
+		echo json_encode( array( 
+								'error' => 'invalid_task',
+								'error_msg'=>'__("Something went wrong try reloading the page","bmag")'
+								));
+					wp_die();
+	}
+	
+
+	//updating data
+	update_option( BMAG_OPT, $options);
+	wp_die();
+}
+
+/**
+ * Returns options which belong to that tab.
+ */
+function bmag_filter_by_tab($options,$tab){
+
+	$all_settings = bmag_get_all_settings();
+	$tab_settings = array();
+	$filtered = array();
+
+	foreach ( $all_settings as $setting ) {
+		if( $setting['tab'] == $tab ){
+			array_push( $tab_settings,$setting );
+		}
+	}
+
+
+	foreach ($options as $option => $value) {
+		foreach ($tab_settings as $setting) {
+			if($option == $setting['name']){
+				$filtered[$option] = $value;
+			}
+		}
+	}
+
+	return apply_filters( 'bmag_filter_by_tab', $filtered );
+}
+
