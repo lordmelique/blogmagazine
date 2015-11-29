@@ -1,6 +1,6 @@
 <?php
 /**
- * This class have common methods that will be used in theme, things such
+ * This class has common methods that will be used in theme, things such as
  * updating messages, geting parameters from query string and other helpful methods
  */
 class BMAGLibrary{
@@ -12,9 +12,9 @@ class BMAGLibrary{
 	/*==========Public Methods==========*/
 
 	/**
-	* Gets gives parameter from query sting, if there are no parameter returns
-	* blank string ''
-	*/
+	 * Gets gives parameter from query sting, if there are no parameter returns
+	 * blank string ''
+	 */
 	public static function get($key, $default_value = '') {
 	    if (isset($_GET[$key])) {
 	      $value = $_GET[$key];
@@ -32,9 +32,9 @@ class BMAGLibrary{
   	}
 
   	/**
-	* Returns message html by provided $message_id parameter
-	* @param $message_id
-  	*/
+	   * Returns message html by provided $message_id parameter
+	   * @param $message_id
+  	 */
   	public static function message_id($message_id) {
     if ($message_id) {
       switch($message_id) {
@@ -52,11 +52,11 @@ class BMAGLibrary{
 
   public static function arrayToObject($d) {
     if (is_array($d)) {
-    /*
-    * Return array converted to object
-    * Using __FUNCTION__ (Magic constant)
-    * for recursive call
-    */
+    /**
+     * Return array converted to object
+     * Using __FUNCTION__ (Magic constant)
+     * for recursive call
+     */
       return (object) array_map(array('BMAGLibrary','arrayToObject'), $d);
     }
     else {
@@ -73,11 +73,11 @@ class BMAGLibrary{
     }
    
     if (is_array($d)) {
-    /*
-    * Return array converted to object
-    * Using __FUNCTION__ (Magic constant)
-    * for recursive call
-    */
+    /**
+     * Return array converted to object
+     * Using __FUNCTION__ (Magic constant)
+     * for recursive call
+     */
       return array_map(array('BMAGLibrary','objectToArray'), $d);
     }
     else {

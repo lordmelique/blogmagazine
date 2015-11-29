@@ -9,10 +9,10 @@ class BMAGControllerThemePage_bmag {
   /*==========Public Methods==========*/
 
   /**
-  * Runs method defined in query task argument if method doesn't exist
-  * runs default display() method, it also checks if there is message in query,
-  * then displays it
-  */
+   * Runs method defined in query task argument if method doesn't exist
+   * runs default display() method, it also checks if there is message in query,
+   * then displays it
+   */
   //TODO fix nonce problem
   public function execute() {
    

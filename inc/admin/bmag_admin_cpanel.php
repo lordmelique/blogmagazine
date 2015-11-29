@@ -75,37 +75,37 @@ function bmag_register_settings(){
 			
 			if( 'custom' != $settingtype ){
 				add_settings_field( 
-				 	// String for use in the 'id' attribute of tags.
-				 	BMAG_VAR . '_setting_' . $settingname,
-				 	// Title of the field.
-				 	$settingtitle,
-				 	/* Function that fills the field with the desired inputs as part of the larger form.
-				 	  Passed a single argument, the $args array. Name and id of the input should match the $id given to this function.
-				 	  The function should echo its output.*/
-				 	'bmag_field_callback',
-				 	// The menu page on which to display this field. Should match $menu_slug from add_theme_page() or from do_settings_sections(). 
-				 	'bmag_' . $settingtab . '_tab',
-				 	/* The section of the settings page in which to show the box (default or a section you added with add_settings_section(),
-				 	   look at the page in the source to see what the existing ones are.) */
-				 	'bmag_' . $settingsection . '_section',
-				 	// Additional arguments that are passed to the $callback function.
-				 	$setting 
+					// String for use in the 'id' attribute of tags.
+					BMAG_VAR . '_setting_' . $settingname,
+					// Title of the field.
+					$settingtitle,
+					/* Function that fills the field with the desired inputs as part of the larger form.
+					  Passed a single argument, the $args array. Name and id of the input should match the $id given to this function.
+					  The function should echo its output.*/
+					'bmag_field_callback',
+					// The menu page on which to display this field. Should match $menu_slug from add_theme_page() or from do_settings_sections(). 
+					'bmag_' . $settingtab . '_tab',
+					/* The section of the settings page in which to show the box (default or a section you added with add_settings_section(),
+					   look at the page in the source to see what the existing ones are.) */
+					'bmag_' . $settingsection . '_section',
+					// Additional arguments that are passed to the $callback function.
+					$setting 
 				);
 			} else {
 				add_settings_field( 
-			 	// String for use in the 'id' attribute of tags.
-			 	BMAG_VAR . '_setting_' . $settingname,
-			 	// Title of the field.
-			 	$settingtitle,
-			 	/* Function that fills the field with the desired inputs as part of the larger form.
-			 	  Passed a single argument, the $args array. Name and id of the input should match the $id given to this function.
-			 	  The function should echo its output.*/
-			 	'bmag_field_callback_' . $settingname,
-			 	// The menu page on which to display this field. Should match $menu_slug from add_theme_page() or from do_settings_sections(). 
-			 	'bmag_' . $settingtab . '_tab',
-			 	/* The section of the settings page in which to show the box (default or a section you added with add_settings_section(),
-			 	   look at the page in the source to see what the existing ones are.) */
-			 	'bmag_' . $settingsection . '_section'
+				// String for use in the 'id' attribute of tags.
+				BMAG_VAR . '_setting_' . $settingname,
+				// Title of the field.
+				$settingtitle,
+				/* Function that fills the field with the desired inputs as part of the larger form.
+				  Passed a single argument, the $args array. Name and id of the input should match the $id given to this function.
+				  The function should echo its output.*/
+				'bmag_field_callback_' . $settingname,
+				// The menu page on which to display this field. Should match $menu_slug from add_theme_page() or from do_settings_sections(). 
+				'bmag_' . $settingtab . '_tab',
+				/* The section of the settings page in which to show the box (default or a section you added with add_settings_section(),
+				   look at the page in the source to see what the existing ones are.) */
+				'bmag_' . $settingsection . '_section'
 			);
 			}
 		} 
@@ -123,46 +123,46 @@ function bmag_admin_enqueue_scripts() {
 
 /**
  * This is blueprint for settings tabs,
- * @return array of tab objects with it's properties
+ * @return array of tab objects with its properties
  */
 function bmag_get_tabs(){
 	$tabs = array();
 
 	$tabs['general'] = array(
-	    'name' => 'general',
-	    'title' => __( 'General', 'bmag' ),
-	    'sections' => array(
-	      'demo_section' => array(
-	        'name' => 'demo_section',
-	        'title' => __( 'Demo Section', 'bmag' ),
-	        'description' => 'Demo Description'
-	      ),
-	      'demo_section2' => array(
-	        'name' => 'demo_section2',
-	        'title' => __( 'Demo Section 2', 'bmag' ),
-	        'description' => 'Demo Description'
-	      )
+		'name' => 'general',
+		'title' => __( 'General', 'bmag' ),
+		'sections' => array(
+		  'demo_section' => array(
+			'name' => 'demo_section',
+			'title' => __( 'Demo Section', 'bmag' ),
+			'description' => 'Demo Description'
+		  ),
+		  'demo_section2' => array(
+			'name' => 'demo_section2',
+			'title' => __( 'Demo Section 2', 'bmag' ),
+			'description' => 'Demo Description'
+		  )
 	   ),
 	  'icon' => 'fa fa-cogs',
 	  'description' => bmag_tab_descr('general')
 	);
 	$tabs['home'] = array(
-	    'name' => 'home',
-	    'title' => __( 'Home', 'bmag' ),
-	    'sections' => array(
-	      'home_section' => array(
-	        'name' => 'home_section',
-	        'title' => __( 'Demo Section', 'bmag' ),
-	        'description' => 'Demo Description'
-	      ),
-	      'home_section2' => array(
-	        'name' => 'home_section2',
-	        'title' => __( 'Demo Section 2', 'bmag' ),
-	        'description' => 'Demo Description'
-	      )
-	   ),
-	   'icon' => 'fa fa-home',
-	  'description' => bmag_tab_descr('home')
+		'name' => 'home',
+		'title' => __( 'Home', 'bmag' ),
+		'sections' => array(
+		  'home_section' => array(
+			'name' => 'home_section',
+			'title' => __( 'Demo Section', 'bmag' ),
+			'description' => 'Demo Description'
+		  ),
+		  'home_section2' => array(
+			'name' => 'home_section2',
+			'title' => __( 'Demo Section 2', 'bmag' ),
+			'description' => 'Demo Description'
+		  )
+		),
+		'icon' => 'fa fa-home',
+		'description' => bmag_tab_descr('home')
 	);
 	return apply_filters( 'bmag_get_tabs', $tabs );
 }
@@ -177,19 +177,19 @@ function bmag_get_all_settings(){
 	$settings = array();
 
 	require_once( BMAG_DIR . '/inc/admin/settings/BMAGGeneralSettings.php' );
-  	$settings_by_tabs['general'] = new BMAGGeneralSettings();
+	$settings_by_tabs['general'] = new BMAGGeneralSettings();
 
 	require_once( BMAG_DIR . '/inc/admin/settings/BMAGHomeSettings.php' );
-  	$settings_by_tabs['home'] = new BMAGHomeSettings();
+	$settings_by_tabs['home'] = new BMAGHomeSettings();
 
 
-  	foreach ( $settings_by_tabs as $tab ) {
-  		foreach ( $tab->options as $option => $value ) {
-  			$settings[$option] = $value;
-  		}
-  	}
-  	
-  	return apply_filters( 'bmag_get_all_settings', $settings );
+	foreach ( $settings_by_tabs as $tab ) {
+		foreach ( $tab->options as $option => $value ) {
+			$settings[$option] = $value;
+		}
+	}
+	
+	return apply_filters( 'bmag_get_all_settings', $settings );
 }
 
 /**
@@ -222,24 +222,104 @@ function bmag_section_callback(){
 /**
  * Callback function for settings fields
  */
-function bmag_field_callback($option){
-	
-	$value = get_option( BMAG_OPT,'asda');
+function bmag_field_callback( $option, $context = 'option', $opt_val ='', $meta = array() ) {
 
-	$optionname = BMAG_OPT.'[' .$option['name']. ']';
-	$val = isset($value[$option['name']]) ? $value[$option['name']] : 'no opt';
-
-	if($option['type'] == 'checkbox'){
-		?><input type="checkbox" <?php checked($val || $val =='on'); ?> id="dd_<?php echo $optionname;?>" name="<?php echo $optionname;?>">
-			<label for="dd_<?php echo $optionname;?>"><?php echo $option['description'] ?></label>
-		 <?php
-	}else{
-		
-		?> <input type="text" value="<?php echo $val?>" name='<?php echo $optionname; ?>'> <?php
+	require_once(BMAG_DIR . '/inc/admin/framework/BMAGOutputs.php');
+	$bmag_outputs = new BMAGOutputs();
+ 
+	if(isset($option['mod']) && $option['mod']){
+		$context = 'mod';
 	}
+
+	$fieldtype = $option['type'];
+
+	switch($fieldtype){
+
+		case 'button' : { 
+			echo $bmag_outputs->button($option, $context, $opt_val, $meta);
+			break;
+		}
+		case 'color' : {
+			echo $bmag_outputs->color($option, $context, $opt_val, $meta);
+			break;
+		}
+		case 'colors' : {
+			echo $bmag_outputs->colors($option, $context, $opt_val, $meta);
+			break;
+		}
+		case 'checkbox' : {
+			echo $bmag_outputs->checkbox($option, $context, $opt_val, $meta);
+			break;
+		}
+		case 'checkbox_open' : { 
+			echo $bmag_outputs->checkbox_open($option, $context, $opt_val, $meta);
+			break;
+		}
+		case 'text' : {
+			echo $bmag_outputs->input($option, $context, $opt_val, $meta);
+			break;
+		}  
+		case 'layout' : {
+			echo $bmag_outputs->radio_images($option, $context, $opt_val, $meta);
+			break;
+		}
+		case 'layout_open' : {
+			echo $bmag_outputs->radio_images_open($option, $context, $opt_val, $meta);
+			break;
+		}
+		case 'radio' : {
+			echo $bmag_outputs->radio($option, $context, $opt_val, $meta);
+			break;
+		}
+		case 'radio_open' : {
+			echo $bmag_outputs->radio_open($option, $context, $opt_val, $meta);
+			break;
+		}
+		case 'select' : {
+			echo $bmag_outputs->select($option, $context, $opt_val, $meta);
+			break;
+		}
+		case 'select_open' : { 
+			echo $bmag_outputs->select_open($option, $context, $opt_val, $meta);
+			break;
+		}
+		case 'select_theme' : { 
+			echo $bmag_outputs->select_theme($option, $context, $opt_val, $meta);
+			break;
+		}
+		case 'select_style' : { 
+			echo $bmag_outputs->select_style($option, $context, $opt_val, $meta);
+			break;
+		}
+		case 'textarea' : { 
+			echo $bmag_outputs->textarea($option, $context, $opt_val, $meta);
+			break;
+		}
+		case 'text_preview' : { 
+			echo $bmag_outputs->text_preview($option, $context, $opt_val, $meta);
+			break;
+		}
+		case 'upload_single' : { 
+			echo $bmag_outputs->upload_single($option, $context, $opt_val, $meta);
+			break;
+		}
+		case 'upload_multiple' : { 
+			echo $bmag_outputs->upload_multiple($option, $context, $opt_val, $meta);
+			break;
+		}
+		case 'range' : {
+			echo $bmag_outputs->range();
+			break;
+		}
+		default : {
+		  echo __("Such element type does not exist!", WDWT_LANG);
+		}    
+	}
+
+	if( isset( $option['description']) && $option['description'] != '' ) : ?>
+		<span class="description"><?php echo esc_html($option['description']); ?></span>
+	<?php endif;
 }
-
-
 /**
  * Validates all settings getted from settings form
  *
