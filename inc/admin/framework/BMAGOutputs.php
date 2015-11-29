@@ -17,6 +17,96 @@ class BMAGOutputs{
 		$this->params = $this->merge_params($defaults,$initial_params);     
 	}
  
+ 	public function render_field($option,$context,$opt_val,$meta){
+ 		if(isset($option['mod']) && $option['mod']){
+			$context = 'mod';
+		}
+
+ 		switch($option['type']){
+			case 'button' : { 
+				echo $this->button($option, $context, $opt_val, $meta);
+				break;
+			}
+			case 'color' : {
+				echo $this->color($option, $context, $opt_val, $meta);
+				break;
+			}
+			case 'colors' : {
+				echo $this->colors($option, $context, $opt_val, $meta);
+				break;
+			}
+			case 'checkbox' : {
+				echo $this->checkbox($option, $context, $opt_val, $meta);
+				break;
+			}
+			case 'checkbox_open' : { 
+				echo $this->checkbox_open($option, $context, $opt_val, $meta);
+				break;
+			}
+			case 'text' : {
+				echo $this->input($option, $context, $opt_val, $meta);
+				break;
+			}  
+			case 'layout' : {
+				echo $this->radio_images($option, $context, $opt_val, $meta);
+				break;
+			}
+			case 'layout_open' : {
+				echo $this->radio_images_open($option, $context, $opt_val, $meta);
+				break;
+			}
+			case 'radio' : {
+				echo $this->radio($option, $context, $opt_val, $meta);
+				break;
+			}
+			case 'radio_open' : {
+				echo $this->radio_open($option, $context, $opt_val, $meta);
+				break;
+			}
+			case 'select' : {
+				echo $this->select($option, $context, $opt_val, $meta);
+				break;
+			}
+			case 'select_open' : { 
+				echo $this->select_open($option, $context, $opt_val, $meta);
+				break;
+			}
+			case 'select_theme' : { 
+				echo $this->select_theme($option, $context, $opt_val, $meta);
+				break;
+			}
+			case 'select_style' : { 
+				echo $this->select_style($option, $context, $opt_val, $meta);
+				break;
+			}
+			case 'textarea' : { 
+				echo $this->textarea($option, $context, $opt_val, $meta);
+				break;
+			}
+			case 'text_preview' : { 
+				echo $this->text_preview($option, $context, $opt_val, $meta);
+				break;
+			}
+			case 'upload_single' : { 
+				echo $this->upload_single($option, $context, $opt_val, $meta);
+				break;
+			}
+			case 'upload_multiple' : { 
+				echo $this->upload_multiple($option, $context, $opt_val, $meta);
+				break;
+			}
+			case 'range' : {
+				echo $this->range();
+				break;
+			}
+			default : {
+			  echo __("Such element type does not exist!", 'bmag');
+			}    
+		}
+		if( isset( $option['description']) && $option['description'] != '' ) : ?>
+			<label class="description" for="<?php echo $option['name'] ?>"><?php echo esc_html($option['description']); ?></label>
+		<?php endif;
+ 	}
 
 	/**
 	 * Displays a single button for toggling some other elements onclick
@@ -77,16 +167,34 @@ class BMAGOutputs{
 			$optionname = BMAG_OPT.'[' .$element['name']. ']';
 			$opt_val = $bmag_options[$element['name']];
 		}
+		
 		if(is_bool($opt_val)){
 			$opt_val = $opt_val ? 'true' : '';
 		} ?>
+
 		<div class="bmag_param" id="bmag_wrap_<?php echo $element['name']; ?>">
 			<div class="block margin">
 				<div class="optioninput checkbox">
-					<input type="checkbox" class="checkbox" name="<?php echo $optionname; ?>" id="<?php echo $element['name'] ?>" <?php checked($opt_val || $opt_val =='on'); ?> <?php $this->custom_attrs($element); ?> value="<?php echo esc_attr($opt_val); ?>">
+					<input type="checkbox" class="checkbox" name="<?php echo $optionname; ?>" id="<?php echo $element['name'] ?>" <?php checked($opt_val || $opt_val =='on'); ?> <?php $this->custom_attrs($element); ?>>
 				</div>
 			</div>
 		</div>
+
+      <script>
+      
+      jQuery(document).ready(function(){
+          if(jQuery('#<?php echo $element["name"] ?>').attr('checked') != 'checked'){
+             jQuery('#<?php echo $element["name"] ?>').after('<input type=\"hidden\" name=\"' + jQuery('#<?php echo $element["name"] ?>').attr("name") + '\" value="0">');
+          }
+          jQuery('#<?php echo $element["name"] ?>').on('click',function(){
+            if (jQuery(this).attr("checked") != 'checked') {
+                       jQuery(this).after("<input type=\"hidden\" name=\"" + jQuery(this).attr("name") + "\" value=0>");
+                    } else {
+                       jQuery(this).next().remove();
+                    }
+          });
+      });
+      </script>
 		<?php   
 	}
 

@@ -25,6 +25,7 @@ class BMAGGeneralSettings{
 	        "name" => "demo_option2",
 	        "title" => __("This is demo option 2", 'bmag' ),
 	        'type' => 'select',
+	        'multiple' => 'true',
 	        "description" => "",
 	        "valid_options" => array(
 	          "left-top" => "left-top",

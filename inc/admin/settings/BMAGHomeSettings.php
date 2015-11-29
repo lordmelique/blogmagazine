@@ -25,7 +25,7 @@ class BMAGHomeSettings{
 	        "name" => "home_option2",
 	        "title" => __("This is home option 2", 'bmag' ),
 	        'type' => 'select',
-	        "description" => "",
+	        "description" => "Hi dude how are you",
 	        "valid_options" => array(
 	          "left-top" => "left-top",
 	          "left-middle"  =>  "left-middle",

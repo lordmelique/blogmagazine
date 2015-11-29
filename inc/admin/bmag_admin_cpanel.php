@@ -3,9 +3,9 @@
 add_action( 'admin_menu', 'bmag_add_theme_page' );
 add_action( 'admin_init', 'bmag_register_settings' );
 add_action( 'admin_enqueue_scripts', 'bmag_admin_enqueue_scripts' );
+add_action( 'option_' . BMAG_OPT, 'bmag_options_mix_defaults' );
+add_action( 'after_setup_theme', 'bmag_options_init', 10, 2 );
 
-
-add_action( 'wp_ajax_bmag_form_submit', 'bmag_form_submit_callback' );
 
 /**
  * Creates Theme menu page
@@ -42,14 +42,13 @@ function bmag_theme_page_callback() {
  */
 function bmag_register_settings(){
 
-	global $bmag_tabs,$bmag_tabnames,$bmag_defaults;
+	global $bmag_tabs,$bmag_tabnames;
 	//registering setting
 	register_setting( 'bmag_options', 'theme_' . BMAG_VAR . '_options', 'bmag_options_validate' );
 	
 	//registering settings sections
 	$bmag_tabs = bmag_get_tabs();
 	$bmag_tabnames = bmag_get_tab_names();
-	$bmag_defaults = bmag_get_defaults();
 	foreach ($bmag_tabs as $tab) {
 		$tabname = $tab['name'];
 		$sections = $tab['sections'];
@@ -226,6 +225,7 @@ function bmag_get_defaults(){
 	foreach ($settings as $setting) {
 		$defaults[$setting['name']] = $setting['default'];
 	}
+	$defaults['theme_version'] = BMAG_VERSION;
 	return apply_filters( 'bmag_get_defaults', $defaults );
 }
 /**
@@ -259,102 +259,9 @@ function bmag_section_callback(){
  * Callback function for settings fields
  */
 function bmag_field_callback( $option, $context = 'option', $opt_val ='', $meta = array() ) {
-
 	require_once(BMAG_DIR . '/inc/admin/framework/BMAGOutputs.php');
 	$bmag_outputs = new BMAGOutputs();
- 
-	if(isset($option['mod']) && $option['mod']){
-		$context = 'mod';
-	}
-
-	$fieldtype = $option['type'];
-
-	switch($fieldtype){
-
-		case 'button' : { 
-			echo $bmag_outputs->button($option, $context, $opt_val, $meta);
-			break;
-		}
-		case 'color' : {
-			echo $bmag_outputs->color($option, $context, $opt_val, $meta);
-			break;
-		}
-		case 'colors' : {
-			echo $bmag_outputs->colors($option, $context, $opt_val, $meta);
-			break;
-		}
-		case 'checkbox' : {
-			echo $bmag_outputs->checkbox($option, $context, $opt_val, $meta);
-			break;
-		}
-		case 'checkbox_open' : { 
-			echo $bmag_outputs->checkbox_open($option, $context, $opt_val, $meta);
-			break;
-		}
-		case 'text' : {
-			echo $bmag_outputs->input($option, $context, $opt_val, $meta);
-			break;
-		}  
-		case 'layout' : {
-			echo $bmag_outputs->radio_images($option, $context, $opt_val, $meta);
-			break;
-		}
-		case 'layout_open' : {
-			echo $bmag_outputs->radio_images_open($option, $context, $opt_val, $meta);
-			break;
-		}
-		case 'radio' : {
-			echo $bmag_outputs->radio($option, $context, $opt_val, $meta);
-			break;
-		}
-		case 'radio_open' : {
-			echo $bmag_outputs->radio_open($option, $context, $opt_val, $meta);
-			break;
-		}
-		case 'select' : {
-			echo $bmag_outputs->select($option, $context, $opt_val, $meta);
-			break;
-		}
-		case 'select_open' : { 
-			echo $bmag_outputs->select_open($option, $context, $opt_val, $meta);
-			break;
-		}
-		case 'select_theme' : { 
-			echo $bmag_outputs->select_theme($option, $context, $opt_val, $meta);
-			break;
-		}
-		case 'select_style' : { 
-			echo $bmag_outputs->select_style($option, $context, $opt_val, $meta);
-			break;
-		}
-		case 'textarea' : { 
-			echo $bmag_outputs->textarea($option, $context, $opt_val, $meta);
-			break;
-		}
-		case 'text_preview' : { 
-			echo $bmag_outputs->text_preview($option, $context, $opt_val, $meta);
-			break;
-		}
-		case 'upload_single' : { 
-			echo $bmag_outputs->upload_single($option, $context, $opt_val, $meta);
-			break;
-		}
-		case 'upload_multiple' : { 
-			echo $bmag_outputs->upload_multiple($option, $context, $opt_val, $meta);
-			break;
-		}
-		case 'range' : {
-			echo $bmag_outputs->range();
-			break;
-		}
-		default : {
-		  echo __("Such element type does not exist!", WDWT_LANG);
-		}    
-	}
-
-	if( isset( $option['description']) && $option['description'] != '' ) : ?>
-		<span class="description"><?php echo esc_html($option['description']); ?></span>
-	<?php endif;
+	$bmag_outputs->render_field($option,$context,$opt_val,$meta);
 }
 /**
  * Validates all settings getted from settings form
@@ -478,142 +385,49 @@ function bmag_do_settings_fields($page, $section) {
 
 		echo '<div class="bmag_field_content">';
 		call_user_func($field['callback'], $field['args']);
+		echo '<div class="clear"></div>';
 		echo '</div>';
 		echo '</div>';
 	}
 }
 
+
 /**
- * Ajax callback of options form
- *
- * Verifies nonce, then parses data and filters it based on @param $task
+ * Pre oprion callback
  */
-function bmag_form_submit_callback(){
-	//verifing nonce
-	global $bmag_tabnames,$bmag_defaults;
-	//this should be done my global !!!!!!!!TODO
-	$bmag_options = get_option( BMAG_OPT );
-
-	$data = isset( $_POST['data'] ) ? $_POST['data'] : '';
-	if( ! isset( $_POST['nonce'] ) ){
-		wp_die('there are no nonce');
-	}
-	if ( ! wp_verify_nonce( $_POST['nonce'], 'bmag_submit_form_data' )){
-		wp_die('invalid nonce');
-	}
-
-	//parsing data
-	$strlen = strlen('theme_' . BMAG_VAR . '_options');
-	$settings = json_decode( stripcslashes( $data ) );
-	$options = array();
-	foreach ( $settings as $setting ) {
-		switch( $setting->name ){
-			case 'bmag_current_tab':{
-				$current_tab = $setting->value;
-				break;
-			}
-			case 'bmag_task':{
-				$task = $setting->value;
-				break;
-			}
-			default:{
-				$settingname = substr( $setting->name, $strlen + 1, strlen( $setting->name ) - $strlen - 2 );
-				$options[$settingname] = $setting->value;
-				break;
-			}
-		}
-	}
-	//removeing prefixes from tabname 'bmag_' . $tabname . '_tabs'
-	$current_tab = substr( $current_tab, 5, strlen( $current_tab ) - 9 );
-	if( isset( $task ) ){
-		if ( isset( $current_tab ) && in_array( $current_tab, $bmag_tabnames ) ){
-	
-			switch( $task ){
-				case 'save_tab':{
-					$options = bmag_filter_by_tab($options,$current_tab);
-					$options = wp_parse_args( $options, $bmag_options );
-					break;
-				}
-				case 'reset_tab': {
-					$defaults = bmag_filter_by_tab($bmag_defaults,$current_tab);
-					$options = wp_parse_args( $defaults, $options );
-					break;
-				}
-				case 'save_all': {
-					$options = wp_parse_args( $options, $bmag_defaults );
-					break;
-				}
-				case 'reset_all':{
-					$options = $bmag_defaults;
-					break;
-				}
-				default: {
-					echo json_encode( array( 
-									'error' => 'invalid_task',
-									'error_msg'=>'__("Something went wrong try reloading the page","bmag")'
-									));
-					wp_die();
-					break;
-				}
-			}	
-		}else{
-			switch( $task ){
-				case 'save_all':{
-					$options = wp_parse_args( $options, $bmag_defaults );
-					break;
-				}
-				case 'reset_all':{
-					$options = $bmag_defaults;
-					break;
-				}
-				default:{
-					echo json_encode( array( 
-						'error' => 'wrong_settings_tab',
-						'error_msg'=>'__("Something went wrong try reloading the page","bmag")'
-						));
-					wp_die();
-				}
-			}
-			
-		}
-	}else{
-		echo json_encode( array( 
-								'error' => 'invalid_task',
-								'error_msg'=>'__("Something went wrong try reloading the page","bmag")'
-								));
-					wp_die();
-	}
-	
-
-	//updating data
-	update_option( BMAG_OPT, $options);
-	wp_die();
+function bmag_options_mix_defaults( $options ){
+  $option_defaults = bmag_get_defaults( );
+  /*theme version is saved separately*/
+  /*for the updater*/
+  if( isset($option_defaults['theme_version']) ){
+    unset( $option_defaults['theme_version'] );
+  }
+  $options = wp_parse_args( $options, $option_defaults );
+  return $options;
 }
 
 /**
- * Returns options which belong to that tab.
+ * Initializes theme options, if update needed updates them
  */
-function bmag_filter_by_tab($options,$tab){
+function bmag_options_init() {
+  global $bmag_options;
+  $option_defaults = bmag_get_defaults( );
+  $new_version = $option_defaults['theme_version'];
+  $options = get_option( BMAG_OPT, array( ) );
 
-	$all_settings = bmag_get_all_settings();
-	$tab_settings = array();
-	$filtered = array();
+  if( isset( $options['theme_version'] ) ){
+    $old_version = $options['theme_version'];
+  }
+  else{
+    $old_version = '0.0.0';
+  }
 
-	foreach ( $all_settings as $setting ) {
-		if( $setting['tab'] == $tab ){
-			array_push( $tab_settings,$setting );
-		}
-	}
-
-
-	foreach ($options as $option => $value) {
-		foreach ($tab_settings as $setting) {
-			if($option == $setting['name']){
-				$filtered[$option] = $value;
-			}
-		}
-	}
-
-	return apply_filters( 'bmag_filter_by_tab', $filtered );
+  if( $new_version !== $old_version ){
+    require_once( 'bmag_updater.php' );
+    $theme_update = new Blog_Magazine_updater( $new_version, $old_version );
+    $options = $theme_update->get_old_params();  /* old params in new format */
+  }
+    
+  /*overwrite defaults with new options*/
+  $bmag_options = apply_filters('bmag_options_init', $options);
 }
-

@@ -9,7 +9,6 @@ class BMAGViewThemePage_bmag{
 	public function __construct($model){
 		$this->model = $model;
 		$this->tabs = $this->model->get_tabs();
-		$this->active_tab = 'general';
 
 		$this->links = array(
 		'documentation' => array(
@@ -107,7 +106,7 @@ class BMAGViewThemePage_bmag{
 				float: left;
 			}
 			#bmag_reset_savebar,
-			#bmag_reset_tab_infobar{
+			#bmag_reset_infobar{
 				font-family: Arial,Verdana,sans-serif;
 			    padding: 0 7px;
 			    height: 23px;
@@ -116,9 +115,8 @@ class BMAGViewThemePage_bmag{
 				border: 1px solid #ff4444 !important;
 				float: left;
 			}
-			#bmag_reset_tab_infobar,
 			#bmag_save_infobar,
-			#bmag_save_tab_infobar{
+			#bmag_reset_infobar{
 				margin-left: 5px;
 				float: right;
 			}
@@ -131,7 +129,7 @@ class BMAGViewThemePage_bmag{
 			.bmag_nav_tabs{
 				float: left;
 			    position: relative;
-			    z-index: 9999;
+			    z-index: 1;
 			    width: 20%;
 			}
 			.bmag_nav_tab{
@@ -221,10 +219,15 @@ class BMAGViewThemePage_bmag{
 			.bmag_settings_tab .bmag_settings_section:nth-child(1) .bmag_section_caret{
 				transform: rotate(90deg);
 			}
-			.bmag_settings_field label{
+			.bmag_settings_field .description{
 			    padding: 0 10px 0 0;
-			    font-size: 11px;
+			    font-size: 13px;
+			    line-height: 13px;
+			    vertical-align: middle;
 			    color: #999999;
+			}
+			.bmag_param{
+				display: inline-block;
 			}
 			.bmag_settings_section .bmag_section_title{
 				padding: 15px 10px;
@@ -310,9 +313,8 @@ class BMAGViewThemePage_bmag{
 				<span>
 					<div class="bmag_expand_options"></div>
 				</span>
-				<button id="bmag_reset_tab_infobar" class="button button-secondary"><?php _e('Reset Tab','bmag'); ?></button>
-				<button id="bmag_save_tab_infobar" class="button button-secondary"><?php _e('Save Tab','bmag'); ?></button>
-				<button id="bmag_save_infobar" class="button button-primary"><?php _e('Save All','bmag'); ?></button>
+				<button id="bmag_reset_infobar" class="button button-secondary form_btn"><?php _e('Reset Defaults','bmag'); ?></button>
+				<button id="bmag_save_infobar" class="button button-primary"><?php _e('Save Changes','bmag'); ?></button>
 				<div class="clear"></div>
 			</div>
 			<div class="bmag_body">
@@ -320,50 +322,41 @@ class BMAGViewThemePage_bmag{
 					<?php 
 						foreach ($this->tabs as $tab) {
 							$page = 'bmag_' . $tab['name'] . '_tab';
-							$active_class = ( $this->active_tab == $tab['name'] ) ? 'bmag_nav_tab_current' : '';
-
-
+							$active_class = ( $this->model->active_tab == $tab['name'] ) ? 'bmag_nav_tab_current' : '';
 							?>
-								<div id="<?php echo esc_attr( $page ); ?>" class="bmag_nav_tab <?php echo $active_class; ?>" onclick="bmag_admin_controller.switchTab('<?php echo esc_attr( $page ); ?>')">
-									<div class="bmag_nav_tab_wrap">
-										<span class="bmag_tab_icon <?php echo isset($tab['icon']) ? esc_attr( $tab['icon'] ) : ''; ?>"></span>
-										<h3 class="bmag_nav_tab_title"> <?php echo $tab['title'] ?> </h3>
+								<a style="text-decoration:none" href="<?php echo admin_url( "themes.php?page=blog-magazine&tab=" ) . $tab['name']; ?>">
+									<div id="<?php echo esc_attr( $page ); ?>" class="bmag_nav_tab <?php echo $active_class; ?>">
+										<div class="bmag_nav_tab_wrap">
+											<span class="bmag_tab_icon <?php echo isset($tab['icon']) ? esc_attr( $tab['icon'] ) : ''; ?>"></span>
+											<h3 class="bmag_nav_tab_title"> <?php echo $tab['title'] ?> </h3>
+										</div>
 									</div>
-								</div>
+									<div class="clear"></div>
+								</a>
 							<?php
 						}
 					 ?>
 				</div>
 				<div class="bmag_form_container">
 					<form id="bmag_settings_form" action="options.php" method="post">
-					<input type="hidden" id="bmag_current_tab" name="bmag_current_tab" value="bmag_<?php echo $this->active_tab; ?>_tab">
-					<input type="hidden" id="bmag_task" name="bmag_task" value="">
+					<input type="hidden" id="bmag_task" name="<?php echo BMAG_OPT. '[task]' ?>" value="save">
 					<?php
-						
-					    foreach ( $this->tabs as $tab ) {
-					    	$page = 'bmag_' . $tab['name'] . '_tab';
-					    	if( $this->active_tab == $tab['name'] ){
-					    		bmag_do_settings_sections( $page, 'active' );
-					    	}else{
-					    		bmag_do_settings_sections( $page );
-					    	}
-					    	
-					    }
+						settings_fields( "bmag_options" );
+				    	$page = 'bmag_' .  $this->model->active_tab . '_tab';
+				    	bmag_do_settings_sections( $page, 'active' );
 					 ?>
 					</form>
 				</div>
 				<div class="clear"></div>
 				<div class="bmag_save_bar">
-					<button id="bmag_reset_savebar" class="button button-secondary"><?php _e('Reset Options','bmag'); ?></button>
-					<button id="bmag_save_savebar" class="button button-primary"><?php _e('Save All Changes','bmag'); ?></button>
+					<button id="bmag_reset_savebar" class="button button-secondary"><?php _e('Reset Defaults','bmag'); ?></button>
+					<button id="bmag_save_savebar" class="button button-primary"><?php _e('Save Changes','bmag'); ?></button>
 					<div class="clear"></div>
 				</div>
 			</div>
 		</div>
-		
 		<?php
 	}
-
 }
 
 
