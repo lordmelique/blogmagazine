@@ -50,11 +50,11 @@ bmag_admin_controller.init = function(){
  	})
 
  	this.saveBtn.on('click',function(){
- 		controller.submitForm('save');
+ 		controller.submitForm('submit');
  	});
 
 	this.saveBtnTop.on('click',function(){
-		controller.submitForm('save');
+		controller.submitForm('submit');
 	});
 
 	this.resetBtn.on('click',function(){
