@@ -41,11 +41,10 @@ function bmag_theme_page_callback() {
  * Registers theme settings
  */
 function bmag_register_settings(){
-
 	global $bmag_tabs,$bmag_tabnames;
 	//registering setting
 	register_setting( 'bmag_options', 'theme_' . BMAG_VAR . '_options', 'bmag_options_validate' );
-	
+
 	//registering settings sections
 	$bmag_tabs = bmag_get_tabs();
 	$bmag_tabnames = bmag_get_tab_names();
@@ -214,6 +213,21 @@ function bmag_get_all_settings(){
 	}
 	
 	return apply_filters( 'bmag_get_all_settings', $settings );
+}
+
+/**
+ * Returns default values of specific settings tab in name => value pairs
+ */
+function bmag_get_tab_defaults($tabname){
+	$settings = bmag_get_all_settings();
+	$tabsettings = array();
+
+	foreach ($settings as $setting => $value) {
+		if( $value['tab'] == $tabname ){
+			$tabsettings[$setting] = $value['default'];
+		}
+	}
+	return apply_filters( 'bmag_get_settings_by_tabname', $tabsettings );
 }
 
 /**

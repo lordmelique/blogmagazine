@@ -12,12 +12,11 @@ jQuery(document).ready(function(){
 bmag_admin_controller.init = function(){
 	this.globalContainer = jQuery('#bmag_theme_options');
 	this.settingsForm    = this.globalContainer.find('#bmag_settings_form');
-	
 	this.resetBtn        = this.globalContainer.find('#bmag_reset_savebar');
 	this.saveBtn         = this.globalContainer.find('#bmag_save_savebar');
 	this.saveBtnTop    = this.globalContainer.find('#bmag_save_infobar');
 	this.resetBtnTop   = this.globalContainer.find('#bmag_reset_infobar');
-	
+
 	//binding necessary events
 	this.bindEvents();
 }
@@ -59,11 +58,11 @@ bmag_admin_controller.init = function(){
 	});
 
 	this.resetBtn.on('click',function(){
-		controller.submitForm('reset');
+		controller.submitForm('reset-'+bmag_current_tab);
 	});
 
 	this.resetBtnTop.on('click',function(){
-		controller.submitForm('reset');
+		controller.submitForm('reset-'+bmag_current_tab);
 	});
  }
 

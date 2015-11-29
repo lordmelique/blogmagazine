@@ -346,6 +346,7 @@ class BMAGViewThemePage_bmag{
 				    	bmag_do_settings_sections( $page, 'active' );
 					 ?>
 					</form>
+				<script>var bmag_current_tab = "<?php echo $this->model->active_tab ?>";</script>
 				</div>
 				<div class="clear"></div>
 				<div class="bmag_save_bar">
