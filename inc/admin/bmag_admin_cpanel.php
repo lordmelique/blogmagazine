@@ -48,10 +48,10 @@ function bmag_register_settings(){
 	//registering settings sections
 	$bmag_tabs = bmag_get_tabs();
 	$bmag_tabnames = bmag_get_tab_names();
-	foreach ($bmag_tabs as $tab) {
+	foreach ( $bmag_tabs as $tab ) {
 		$tabname = $tab['name'];
 		$sections = $tab['sections'];
-		foreach ($sections as $section) {
+		foreach ( $sections as $section ) {
 			add_settings_section( 
 				//String for use in the 'id' attribute of tags.
 				'bmag_' . $section['name'] . '_section',
@@ -68,7 +68,7 @@ function bmag_register_settings(){
 	}
 	//registering settings fields
 	$all_settings = bmag_get_all_settings();
-	foreach ($all_settings as $setting) {
+	foreach ( $all_settings as $setting ) {
 		if( isset( $setting['name'] ) && isset( $setting['title'] ) && isset( $setting['tab'] ) && isset( $setting['section'] ) && isset( $setting['type'] ) ){
 			$settingname    = $setting['name'];
 			$settingtitle   = $setting['title'];
@@ -121,14 +121,14 @@ function bmag_register_settings(){
  * Function where should be enqueued admin styles and scripts
  */
 function bmag_admin_enqueue_scripts() {
-	wp_enqueue_script('jquery');
+	wp_enqueue_script( 'jquery' );
 	wp_enqueue_script( 'themepagecontroller', BMAG_URL . '/inc/js/themepagecontroller.js', array('jquery'), BMAG_VERSION);
 	wp_localize_script( 'themepagecontroller', 'bmag_admin', array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'bmag_nonce' => wp_create_nonce( 'bmag_submit_form_data' )
 		) );
-	wp_enqueue_style( 'bmag-font-awesome', BMAG_URL . '/inc/css/font-awesome/font-awesome.css');
-
+	wp_enqueue_style( 'bmag-font-awesome', BMAG_URL . '/inc/css/font-awesome/font-awesome.css',array(), BMAG_VERSION);
+	wp_enqueue_style( 'bmag-options-page', BMAG_URL . '/inc/css/bmag-options-page.css', array(), BMAG_VERSION );
 }
 
 /**
@@ -154,7 +154,7 @@ function bmag_get_tabs(){
 		  )
 	   ),
 	  'icon' => 'fa fa-cogs',
-	  'description' => bmag_tab_descr('general')
+	  'description' => bmag_tab_descr( 'general' )
 	);
 	$tabs['home'] = array(
 		'name' => 'home',
@@ -172,7 +172,7 @@ function bmag_get_tabs(){
 		  )
 		),
 		'icon' => 'fa fa-home',
-		'description' => bmag_tab_descr('home')
+		'description' => bmag_tab_descr( 'home' )
 	);
 	return apply_filters( 'bmag_get_tabs', $tabs );
 }
@@ -183,8 +183,8 @@ function bmag_get_tabs(){
 function bmag_get_tab_names(){
 	$bmag_tabs = bmag_get_tabs();
 	$tabnames = array();
-	foreach ($bmag_tabs as $tab) {
-		array_push($tabnames,$tab['name']);
+	foreach ( $bmag_tabs as $tab ) {
+		array_push( $tabnames,$tab['name'] );
 	}
 	return $tabnames;
 }
@@ -218,11 +218,11 @@ function bmag_get_all_settings(){
 /**
  * Returns default values of specific settings tab in name => value pairs
  */
-function bmag_get_tab_defaults($tabname){
+function bmag_get_tab_defaults( $tabname ){
 	$settings = bmag_get_all_settings();
 	$tabsettings = array();
 
-	foreach ($settings as $setting => $value) {
+	foreach ( $settings as $setting => $value ) {
 		if( $value['tab'] == $tabname ){
 			$tabsettings[$setting] = $value['default'];
 		}
@@ -236,7 +236,7 @@ function bmag_get_tab_defaults($tabname){
 function bmag_get_defaults(){
 	$settings = bmag_get_all_settings();
 	$defaults = array();
-	foreach ($settings as $setting) {
+	foreach ( $settings as $setting ) {
 		$defaults[$setting['name']] = $setting['default'];
 	}
 	$defaults['theme_version'] = BMAG_VERSION;
@@ -273,14 +273,14 @@ function bmag_section_callback(){
  * Callback function for settings fields
  */
 function bmag_field_callback( $option, $context = 'option', $opt_val ='', $meta = array() ) {
-	require_once(BMAG_DIR . '/inc/admin/framework/BMAGOutputs.php');
+	require_once( BMAG_DIR . '/inc/admin/framework/BMAGOutputs.php' );
 	$bmag_outputs = new BMAGOutputs();
-	$bmag_outputs->render_field($option,$context,$opt_val,$meta);
+	$bmag_outputs->render_field( $option, $context, $opt_val, $meta );
 }
 /**
  * Validates all settings getted from settings form
  *
- * If any option is not valid replaces option with it's default
+ * If any option is not valid replaces option with its default
  * Then returns validated options with bmag_sanitize_options hook attached
  *
  * @param $options
@@ -314,7 +314,7 @@ function bmag_options_sanitizer( $options ){
 
 	return $options;
 }
-add_filter('bmag_sanitize_options', 'bmag_options_sanitizer');
+add_filter( 'bmag_sanitize_options', 'bmag_options_sanitizer' );
 
 
 
@@ -384,7 +384,7 @@ function bmag_do_settings_sections( $page , $display = '') {
  * @param string $page Slug title of the admin page who's settings fields you want to show.
  * @param string $section Slug title of the settings section who's fields you want to show.
  */
-function bmag_do_settings_fields($page, $section) {
+function bmag_do_settings_fields( $page, $section ) {
 	global $wp_settings_fields;
 	if ( ! isset( $wp_settings_fields[$page][$section] ) )
 		return;
@@ -407,7 +407,7 @@ function bmag_do_settings_fields($page, $section) {
 		}
 
 		echo '<div class="bmag_field_content">';
-		call_user_func($field['callback'], $field['args']);
+		call_user_func( $field['callback'], $field['args'] );
 		echo '<div class="clear"></div>';
 		echo '</div>';
 		echo '</div>';
@@ -422,7 +422,7 @@ function bmag_options_mix_defaults( $options ){
   $option_defaults = bmag_get_defaults( );
   /*theme version is saved separately*/
   /*for the updater*/
-  if( isset($option_defaults['theme_version']) ){
+  if( isset( $option_defaults['theme_version'] ) ){
     unset( $option_defaults['theme_version'] );
   }
   $options = wp_parse_args( $options, $option_defaults );
@@ -452,5 +452,5 @@ function bmag_options_init() {
   }
     
   /*overwrite defaults with new options*/
-  $bmag_options = apply_filters('bmag_options_init', $options);
+  $bmag_options = apply_filters( 'bmag_options_init', $options);
 }
