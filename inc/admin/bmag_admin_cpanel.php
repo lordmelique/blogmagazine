@@ -289,6 +289,15 @@ function bmag_field_callback( $option, $context = 'option', $opt_val ='', $meta 
  */
 function bmag_options_validate( $options ){
 
+	if ( $options['task'] != 'save' )
+	{
+		$taskname = explode( '-', $options['task'] );
+		if( $taskname[0] == 'reset' )
+		{
+			
+		}
+	}
+
 	return apply_filters( 'bmag_sanitize_options', $options );
 }
 
