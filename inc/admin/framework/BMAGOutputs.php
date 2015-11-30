@@ -10,6 +10,7 @@ class BMAGOutputs{
 			"textarea_height" => "150",
 			"textarea_width" => "450",
 			"select_width" => "240",
+			"multiple_select_width" => '450',
 			"upload_size" => "30",
 			"upload_filetype" => "image",
 		);
@@ -561,7 +562,7 @@ class BMAGOutputs{
 		}
 		$opt_val = is_array($opt_val) ? $opt_val : array($opt_val);
 		$multiple = isset($element["multiple"]) ? true : false;
-		$width = isset($element["width"]) ? intval($element["width"]) : $this->params["select_width"];
+		$width = isset($element["width"]) ? intval($element["width"]) : (true == $multiple ) ? $this->params['multiple_select_width'] : $this->params["select_width"];
 		$disabled = isset($element["disabled"]) ? $element["disabled"] : array(); ?>
 		<div class="bmag_param" id="bmag_wrap_<?php echo $element['name']; ?>">
 			<div class="block">   
