@@ -18,12 +18,34 @@ bmag_admin_controller.init = function(){
 	this.saveTabTopBtn   = this.globalContainer.find('#bmag_save_tab_infobar');
 	this.resetTabTopBtn   = this.globalContainer.find('#bmag_reset_tab_infobar');
 
-
+	this.navigationTabs  = this.globalContainer.find('.bmag_nav_tab');
+	this.settingsTabs    = this.globalContainer.find('.bmag_settings_tab');
 	//binding necessary events
 	this.bindEvents();
 }
 
+bmag_admin_controller.switchTab = function( tabname ){
+	//change current tab class
+	this.navigationTabs.each( function(){
+		if(jQuery( this ).attr( 'id' ) == tabname){
+			jQuery( this ).addClass( 'bmag_nav_tab_current' );
+		}else{
+			jQuery( this ).removeClass( 'bmag_nav_tab_current' );
+		}
+	});
 
+	//update options
+	this.settingsTabs.each( function(){
+		if( jQuery( this ).attr( 'tab' ) == tabname ){
+			jQuery( this ).addClass( 'bmag_active' );
+		}else{
+			jQuery( this ).removeClass( 'bmag_active' );
+		}
+	});
+	tabname = tabname.split('_')[1];
+	//update hidden field
+	this.settingsForm.find('#bmag_current_tab').val(tabname);
+}
 /**
  * Opens or Closes settings sections
  */
@@ -64,17 +86,19 @@ bmag_admin_controller.init = function(){
 	});
 
 	this.resetTabTopBtn.on('click',function(){
-		controller.submitForm('reset-'+bmag_current_tab);
+		var current_tab = controller.settingsForm.find('#bmag_current_tab').val();
+		controller.submitForm('reset-'+current_tab);
 	});
 
 	this.saveTabTopBtn.on('click',function(){
-		controller.submitForm('submit-'+bmag_current_tab);
+		var current_tab = controller.settingsForm.find('#bmag_current_tab').val();
+		controller.submitForm('submit-'+current_tab);
 	});
 
 	this.settingsForm.submit(function(){
 		jQuery(this).ajaxSubmit({
 			success: function(response){
-				console.log(response);
+				alert();
 			}
 		});
 		return false;

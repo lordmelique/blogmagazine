@@ -1,10 +1,8 @@
 <?php 
 class BMAGModelThemePage_bmag {
   
-  public $active_tab;
   /*============Constructor===========*/
-  public function __construct($tab) {
-    $this->active_tab = $tab;
+  public function __construct() {
   }
   /*==========Public Methods==========*/
   public function get_tabs(){

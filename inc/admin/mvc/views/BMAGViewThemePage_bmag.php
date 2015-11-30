@@ -2,7 +2,7 @@
 class BMAGViewThemePage_bmag{
 	/*=============Variables============*/
 	private $model;
-	public $active_tab;
+	public $active_tab = 'general';
 	public $links;
 	/*============Constructor===========*/
 	public function __construct($model){
@@ -52,17 +52,16 @@ class BMAGViewThemePage_bmag{
 					<?php 
 						foreach ($this->tabs as $tab) {
 							$page = 'bmag_' . $tab['name'] . '_tab';
-							$active_class = ( $this->model->active_tab == $tab['name'] ) ? 'bmag_nav_tab_current' : '';
+							$active_class = ( $this->active_tab== $tab['name'] ) ? 'bmag_nav_tab_current' : '';
 							?>
-								<a style="text-decoration:none" href="<?php echo admin_url( "themes.php?page=blog-magazine&tab=" ) . $tab['name']; ?>">
-									<div id="<?php echo esc_attr( $page ); ?>" class="bmag_nav_tab <?php echo $active_class; ?>">
+								
+									<div id="<?php echo esc_attr( $page ); ?>" class="bmag_nav_tab <?php echo $active_class; ?>" onclick="bmag_admin_controller.switchTab('<?php echo esc_attr( $page ); ?>')">
 										<div class="bmag_nav_tab_wrap">
 											<span class="bmag_tab_icon <?php echo isset($tab['icon']) ? esc_attr( $tab['icon'] ) : ''; ?>"></span>
 											<h3 class="bmag_nav_tab_title"> <?php echo $tab['title'] ?> </h3>
 										</div>
 									</div>
-									<div class="clear"></div>
-								</a>
+									
 							<?php
 						}
 					 ?>
@@ -70,13 +69,20 @@ class BMAGViewThemePage_bmag{
 				<div class="bmag_form_container">
 					<form id="bmag_settings_form" action="options.php" method="post">
 					<input type="hidden" id="bmag_task" name="<?php echo BMAG_OPT. '[task]' ?>" value="submit">
+					<input type="hidden" id="bmag_current_tab" value="<?php echo $this->active_tab; ?>">
 					<?php
 						settings_fields( "bmag_options" );
-				    	$page = 'bmag_' .  $this->model->active_tab . '_tab';
-				    	bmag_do_settings_sections( $page, 'active' );
+				    	
+				    	foreach ($this->tabs as $tab) {
+				    		$page = 'bmag_' .  $tab['name'] . '_tab';
+				    		if($tab['name'] == $this->active_tab){
+				    			bmag_do_settings_sections( $page, 'active' );
+				    		}else{
+				    			bmag_do_settings_sections( $page );
+				    		}
+				    	}
 					 ?>
 					</form>
-				<script>var bmag_current_tab = "<?php echo $this->model->active_tab ?>";</script>
 				</div>
 				<div class="clear"></div>
 				<div class="bmag_save_bar">
