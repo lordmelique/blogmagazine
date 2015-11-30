@@ -122,6 +122,7 @@ function bmag_register_settings(){
  */
 function bmag_admin_enqueue_scripts() {
 	wp_enqueue_script( 'jquery' );
+	wp_enqueue_script( 'jquery-form', array( 'jquery' ) );
 	wp_enqueue_script( 'themepagecontroller', BMAG_URL . '/inc/js/themepagecontroller.js', array('jquery'), BMAG_VERSION);
 	wp_localize_script( 'themepagecontroller', 'bmag_admin', array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
@@ -288,6 +289,7 @@ function bmag_field_callback( $option, $context = 'option', $opt_val ='', $meta 
  *
  */
 function bmag_options_validate( $options ){
+
 
 	if ( $options['task'] != 'save' )
 	{

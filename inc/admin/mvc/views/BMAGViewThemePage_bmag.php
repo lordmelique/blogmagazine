@@ -42,8 +42,9 @@ class BMAGViewThemePage_bmag{
 				<span>
 					<div class="bmag_expand_options"></div>
 				</span>
-				<button id="bmag_reset_infobar" class="button button-secondary form_btn"><?php _e('Reset Defaults','bmag'); ?></button>
-				<button id="bmag_save_infobar" class="button button-primary"><?php _e('Save Changes','bmag'); ?></button>
+				<button id="bmag_reset_tab_infobar" class="button button-secondary form_btn"><?php _e('Reset Tab','bmag'); ?></button>
+				<button id="bmag_save_tab_infobar" class="button button-secondary"><?php _e('Save Tab','bmag'); ?></button>
+				<button id="bmag_save_infobar" class="button button-primary"><?php _e('Save All','bmag'); ?></button>
 				<div class="clear"></div>
 			</div>
 			<div class="bmag_body">

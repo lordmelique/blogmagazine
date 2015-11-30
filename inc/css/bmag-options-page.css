@@ -76,7 +76,8 @@
 	float: left;
 }
 #bmag_reset_savebar,
-#bmag_reset_infobar{
+#bmag_reset_infobar,
+#bmag_reset_tab_infobar{
 	font-family: Arial,Verdana,sans-serif;
     padding: 0 7px;
     height: 23px;
@@ -85,8 +86,9 @@
 	border: 1px solid #ff4444 !important;
 	float: left;
 }
-#bmag_save_infobar,
-#bmag_reset_infobar{
+#bmag_save_tab_infobar,
+#bmag_reset_infobar,
+#bmag_reset_tab_infobar{
 	margin-left: 5px;
 	float: right;
 }

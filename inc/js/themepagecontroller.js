@@ -14,8 +14,10 @@ bmag_admin_controller.init = function(){
 	this.settingsForm    = this.globalContainer.find('#bmag_settings_form');
 	this.resetBtn        = this.globalContainer.find('#bmag_reset_savebar');
 	this.saveBtn         = this.globalContainer.find('#bmag_save_savebar');
-	this.saveBtnTop    = this.globalContainer.find('#bmag_save_infobar');
-	this.resetBtnTop   = this.globalContainer.find('#bmag_reset_infobar');
+	this.saveBtnTop      = this.globalContainer.find('#bmag_save_infobar');
+	this.saveTabTopBtn   = this.globalContainer.find('#bmag_save_tab_infobar');
+	this.resetTabTopBtn   = this.globalContainer.find('#bmag_reset_tab_infobar');
+
 
 	//binding necessary events
 	this.bindEvents();
@@ -50,19 +52,32 @@ bmag_admin_controller.init = function(){
  	})
 
  	this.saveBtn.on('click',function(){
- 		controller.submitForm('submit');
+ 		controller.submitForm('submit-all');
  	});
 
 	this.saveBtnTop.on('click',function(){
-		controller.submitForm('submit');
+		controller.submitForm('submit-all');
 	});
 
 	this.resetBtn.on('click',function(){
+		controller.submitForm('reset-all');
+	});
+
+	this.resetTabTopBtn.on('click',function(){
 		controller.submitForm('reset-'+bmag_current_tab);
 	});
 
-	this.resetBtnTop.on('click',function(){
-		controller.submitForm('reset-'+bmag_current_tab);
+	this.saveTabTopBtn.on('click',function(){
+		controller.submitForm('submit-'+bmag_current_tab);
+	});
+
+	this.settingsForm.submit(function(){
+		jQuery(this).ajaxSubmit({
+			success: function(response){
+				console.log(response);
+			}
+		});
+		return false;
 	});
  }
 
@@ -73,5 +88,5 @@ bmag_admin_controller.init = function(){
  bmag_admin_controller.submitForm = function(task){
  	//update hidden field
 	this.settingsForm.find('#bmag_task').val(task);
-	this.settingsForm.submit();
+	this.settingsForm.trigger('submit');
  }
