@@ -566,13 +566,113 @@ class BMAGOutputs{
 		<div class="bmag_param" id="bmag_wrap_<?php echo $element['name']; ?>">
 			<div class="block">   
 				<div class="optioninput">     
-					<select name="<?php echo $optionname; ?>" id="<?php echo $element['name'] ?>" <?php echo $multiple ? 'multiple="multiple"' : ''; ?> <?php $this->custom_attrs($element); ?> style="width:<?php echo $width; ?>px; resize:vertical;">
+        			 <select name="<?php echo $optionname; ?>" id="<?php echo $element['name'] ?>" <?php echo $multiple ? 'multiple="multiple"' : ''; ?> <?php $this->custom_attrs($element); ?> style="width:<?php echo $width; ?>px; resize:vertical;<?php echo ($multiple==true) ? 'display:none' : ''?>">
 					<?php foreach($element['valid_options'] as $key => $value){ ?>
 						<option value="<?php echo esc_attr($key) ?>" <?php selected(true, in_array($key, $opt_val)); ?> <?php echo in_array($key, $disabled) ? 'disabled="disabled"' : ''; ?>>
 							<?php echo esc_html($value); ?>
 						</option>
 					<?php } ?>
 					</select>
+					<?php if($multiple == true){
+		             ?>
+		             <style>
+		             .bmag_multi_drop{
+		               width:<?php echo $width; ?>px;
+		             }
+		             .bmag_multi_select_container{
+		               width:<?php echo $width; ?>px;
+		             }
+		             </style>
+		             <div class="bmag_multi_select_container">
+		               <ul class="bmag_multi_choices">
+		               <li class="bmag_search_field"><input type="text"></li>
+		               </ul>
+		               <ul class="bmag_multi_drop bmag_multi_drop_hide">
+		                 <?php foreach($element['valid_options'] as $key => $value){
+		                   $multi_class = 'bmag_cst_opt ';
+		                   $multi_class .= (in_array($key, $opt_val) == true) ? 'bmag_option_selected' : '' 
+		                  ?>
+		                   <li value="<?php echo esc_attr($key) ?>" class="<?php echo $multi_class?>">
+		                     <?php echo esc_html($value); ?>
+		                   </li>
+		                 <?php } ?>
+		               </ul>
+		             </div>
+		             <script>
+		             
+		             jQuery('.bmag_multi_choices').on('click',function(){
+		               var globalParent = jQuery("#bmag_wrap_<?php echo $element['name']; ?>");
+		               globalParent.find('.bmag_multi_choices .bmag_search_field input').trigger('focus');
+		             });
+		             // jQuery('.bmag_multi_drop').on('mousewheel',function(e){
+		             //    e.stopPropagation();
+		             // })
+		             jQuery('.bmag_cst_opt').on('click',function(){
+		             	
+		               var globalParent = jQuery("#bmag_wrap_<?php echo $element['name']; ?>");
+		               var value = jQuery(this)[0].getAttribute('value');
+		               var select = jQuery("#<?php echo $element['name'] ?>");
+		               var custom_select = jQuery(this);
+		               if(!custom_select.hasClass('bmag_option_selected')){
+		                 custom_select.addClass('bmag_option_selected');
+		               }else{
+		                 return;
+		               }
+		 
+		               var opt = select.find('option').filter('[value='+value+']');
+		               opt.attr('selected','selected');
+		               select.trigger('change');
+		               custom_select.trigger('mouseleave');
+		               var text = jQuery(this).text();
+		               var newElement =  bmag_search_choice_template(value,text,"<?php echo $element['name']; ?>");
+		               var searchField = globalParent.find('.bmag_multi_choices .bmag_search_field');
+		               searchField.before(newElement);
+		 
+		               globalParent.find('.bmag_multi_choices input').trigger('focus');
+		             });
+		             
+		             
+		             jQuery('.bmag_multi_choices input').on('input',function(){
+		               
+		               var globalParent = jQuery("#bmag_wrap_<?php echo $element['name']; ?>");
+		               var search = jQuery(this).val().toLowerCase();
+		               var custom_select = globalParent.find('.bmag_multi_drop li');
+		               globalParent.find('.bmag_multi_drop').removeClass('bmag_multi_drop_hide');
+		               custom_select.each(function(){
+		                 var key = jQuery(this).html().replace(/\s+/g, '').toLowerCase();
+		                 if(key.indexOf(search) != 0){
+		                   jQuery(this).addClass("bmag_multi_drop_hide");
+		                 }else{
+		                   jQuery(this).removeClass("bmag_multi_drop_hide");
+		                 }
+		               });
+		 
+		             });
+		               jQuery('html').on('click',function(){
+		               var globalParent =  jQuery("#bmag_wrap_<?php echo $element['name']; ?>");
+		               globalParent.find('.bmag_multi_drop').addClass('bmag_multi_drop_hide');
+		             });
+		 
+		             jQuery(document).ready(function(){
+		               var globalParent = jQuery("#bmag_wrap_<?php echo $element['name']; ?>");
+		               globalParent.find('.bmag_multi_drop li').filter('.bmag_option_selected').each(function(){
+		                 var text = jQuery(this).text();
+
+		                 var value = jQuery(this)[0].getAttribute('value');
+		                 var newElement =  bmag_search_choice_template(value,text,"<?php echo $element['name']; ?>");
+		                 var searchField = globalParent.find('.bmag_multi_choices .bmag_search_field');
+		                 searchField.before(newElement);
+		               });
+		             });
+		             /////////////////////
+		             
+		                     
+		             ///////////////////////
+		 
+		           
+		             </script>
+		             <?php
+		           }?>
 				</div>
 			</div>
 		</div>

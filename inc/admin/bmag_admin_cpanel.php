@@ -128,8 +128,11 @@ function bmag_admin_enqueue_scripts() {
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
 				'bmag_nonce' => wp_create_nonce( 'bmag_submit_form_data' )
 		) );
+
+	wp_enqueue_script( 'bmag_elements', BMAG_URL . '/inc/js/BMAG_elements.js', array('jquery'), BMAG_VERSION);
+	
 	wp_enqueue_style( 'bmag-font-awesome', BMAG_URL . '/inc/css/font-awesome/font-awesome.css',array(), BMAG_VERSION);
-	wp_enqueue_style( 'bmag-options-page', BMAG_URL . '/inc/css/bmag-options-page.css', array(), BMAG_VERSION );
+	wp_enqueue_style( 'bmag_admin', BMAG_URL . '/inc/css/admin.css', array(), BMAG_VERSION );
 }
 
 /**
