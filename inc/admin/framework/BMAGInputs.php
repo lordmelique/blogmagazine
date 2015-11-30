@@ -1,5 +1,5 @@
 <?php
-function bmag_options_validate( $input ) {
+function bmag_options_validator( $input ) {
 	
 	global $bmag_options;
 
