@@ -5,7 +5,7 @@ add_action( 'admin_init', 'bmag_register_settings' );
 add_action( 'admin_enqueue_scripts', 'bmag_admin_enqueue_scripts' );
 add_action( 'option_' . BMAG_OPT, 'bmag_options_mix_defaults' );
 add_action( 'after_setup_theme', 'bmag_options_init', 10, 2 );
-
+add_action( 'wp_ajax_bmag_get_options', 'bmag_get_options' );
 
 /**
  * Creates Theme menu page
@@ -126,7 +126,7 @@ function bmag_admin_enqueue_scripts() {
 	wp_enqueue_script( 'themepagecontroller', BMAG_URL . '/inc/js/themepagecontroller.js', array('jquery'), BMAG_VERSION);
 	wp_localize_script( 'themepagecontroller', 'bmag_admin', array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'bmag_nonce' => wp_create_nonce( 'bmag_submit_form_data' )
+				'bmag_options_nonce' => wp_create_nonce( 'bmag_get_current_options' )
 		) );
 
 	wp_enqueue_script( 'bmag_elements', BMAG_URL . '/inc/js/BMAG_elements.js', array('jquery'), BMAG_VERSION);
@@ -293,6 +293,8 @@ function bmag_field_callback( $option, $context = 'option', $opt_val ='', $meta 
  */
 function bmag_options_validate( $options ){
 
+	
+	
 	require_once( BMAG_DIR . '/inc/admin/framework/BMAGInputs.php' );
 
 	//$options = bmag_option_validator( $options );
@@ -452,4 +454,20 @@ function bmag_options_init() {
     
   /*overwrite defaults with new options*/
   $bmag_options = apply_filters( 'bmag_options_init', $options);
+}
+
+
+/**
+ * Sends global $bmag_optoons and $bmag_requested_action as response
+ *
+ */
+function bmag_get_options(){
+	global $bmag_options;
+	$nonce = isset($_POST['nonce']) ? $_POST['nonce'] : ''; 
+	if( !wp_verify_nonce( $nonce, 'bmag_get_current_options' ) ){
+		wp_die("Wrong NOnce");
+	}else{
+		echo json_encode($bmag_options);
+		wp_die();
+	}
 }

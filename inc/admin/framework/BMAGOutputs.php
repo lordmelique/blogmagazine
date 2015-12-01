@@ -600,77 +600,17 @@ class BMAGOutputs{
 		               </ul>
 		             </div>
 		             <script>
-		             
-		             jQuery('.bmag_multi_choices').on('click',function(){
-		               var globalParent = jQuery("#bmag_wrap_<?php echo $element['name']; ?>");
-		               globalParent.find('.bmag_multi_choices .bmag_search_field input').trigger('focus');
-		             });
-		             // jQuery('.bmag_multi_drop').on('mousewheel',function(e){
-		             //    e.stopPropagation();
-		             // })
-		             jQuery('.bmag_cst_opt').on('click',function(){
-		             	
-		               var globalParent = jQuery("#bmag_wrap_<?php echo $element['name']; ?>");
-		               var value = jQuery(this)[0].getAttribute('value');
-		               var select = jQuery("#<?php echo $element['name'] ?>");
-		               var custom_select = jQuery(this);
-		               if(!custom_select.hasClass('bmag_option_selected')){
-		                 custom_select.addClass('bmag_option_selected');
-		               }else{
-		                 return;
-		               }
-		 
-		               var opt = select.find('option').filter('[value='+value+']');
-		               opt.attr('selected','selected');
-		               select.trigger('change');
-		               custom_select.trigger('mouseleave');
-		               var text = jQuery(this).text();
-		               var newElement =  bmag_search_choice_template(value,text,"<?php echo $element['name']; ?>");
-		               var searchField = globalParent.find('.bmag_multi_choices .bmag_search_field');
-		               searchField.before(newElement);
-		 
-		               globalParent.find('.bmag_multi_choices input').trigger('focus');
-		             });
-		             
-		             
-		             jQuery('.bmag_multi_choices input').on('input',function(){
-		               
-		               var globalParent = jQuery("#bmag_wrap_<?php echo $element['name']; ?>");
-		               var search = jQuery(this).val().toLowerCase();
-		               var custom_select = globalParent.find('.bmag_multi_drop li');
-		               globalParent.find('.bmag_multi_drop').removeClass('bmag_multi_drop_hide');
-		               custom_select.each(function(){
-		                 var key = jQuery(this).html().replace(/\s+/g, '').toLowerCase();
-		                 if(key.indexOf(search) != 0){
-		                   jQuery(this).addClass("bmag_multi_drop_hide");
-		                 }else{
-		                   jQuery(this).removeClass("bmag_multi_drop_hide");
-		                 }
-		               });
-		 
-		             });
-		               jQuery('html').on('click',function(){
-		               var globalParent =  jQuery("#bmag_wrap_<?php echo $element['name']; ?>");
-		               globalParent.find('.bmag_multi_drop').addClass('bmag_multi_drop_hide');
-		             });
-		 
-		             jQuery(document).ready(function(){
-		               var globalParent = jQuery("#bmag_wrap_<?php echo $element['name']; ?>");
-		               globalParent.find('.bmag_multi_drop li').filter('.bmag_option_selected').each(function(){
-		                 var text = jQuery(this).text();
-
-		                 var value = jQuery(this)[0].getAttribute('value');
-		                 var newElement =  bmag_search_choice_template(value,text,"<?php echo $element['name']; ?>");
-		                 var searchField = globalParent.find('.bmag_multi_choices .bmag_search_field');
-		                 searchField.before(newElement);
-		               });
-		             });
-		             /////////////////////
-		             
-		                     
-		             ///////////////////////
-		 
-		           
+		                jQuery(document).ready(function(){
+			                var globalParent = jQuery("#bmag_wrap_<?php echo $element['name']; ?>");
+			                bmag_elements.multiple_select_interface_events(globalParent,"<?php echo $element['name']; ?>");
+			                globalParent.find('.bmag_multi_drop li').filter('.bmag_option_selected').each(function(){
+			                var text = jQuery(this).text(),
+			                    value = jQuery(this)[0].getAttribute('value'),
+			                    newElement = bmag_elements.search_choice_template(value,text,"<?php echo $element['name']; ?>"),
+			                    searchField = globalParent.find('.bmag_multi_choices .bmag_search_field');
+			                searchField.before(newElement);
+			              	});
+		            	});
 		             </script>
 		             <?php
 		           }?>
