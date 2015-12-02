@@ -127,3 +127,4 @@ bmag_admin_controller.formSaved = function(){
 		},6000);
 	});
 };
+

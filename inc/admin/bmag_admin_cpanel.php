@@ -281,8 +281,7 @@ function bmag_section_callback(){
  * Callback function for settings fields
  */
 function bmag_field_callback( $option, $context = 'option', $opt_val ='', $meta = array() ) {
-	require_once( BMAG_DIR . '/inc/admin/framework/BMAGOutputs.php' );
-	$bmag_outputs = new BMAGOutputs();
+	global $bmag_outputs;
 	$bmag_outputs->render_field( $option, $context, $opt_val, $meta );
 }
 /**
@@ -438,7 +437,11 @@ function bmag_options_mix_defaults( $options ){
  * Initializes theme options, if update needed updates them
  */
 function bmag_options_init() {
-  global $bmag_options;
+  global $bmag_option,$bmag_outputs;
+
+  require_once( BMAG_DIR . '/inc/admin/framework/BMAGOutputs.php' );
+  $bmag_outputs = new BMAGOutputs();
+
   $option_defaults = bmag_get_defaults( );
   $new_version = $option_defaults['theme_version'];
   $options = get_option( BMAG_OPT, array( ) );
@@ -460,4 +463,12 @@ function bmag_options_init() {
   $bmag_options = apply_filters( 'bmag_options_init', $options);
 }
 
+/**
+ * Refreshes options
+ */
+function bmag_get_options() {
+  global $bmag_options;
+  bmag_options_init();/*refresh options*/
 
+  return apply_filters('bmag_get_options', $bmag_options);
+}

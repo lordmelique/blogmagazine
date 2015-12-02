@@ -12,11 +12,15 @@ define('BMAG_VAR','blog_magazine');
 define("BMAG_OPT",'theme_' . BMAG_VAR . '_options');
 define("BMAG_VERSION",wp_get_theme()->get('Version'));
 
+define("BMAG_IS_PRO", true);
+define("BMAG_HOMEPAGE", "#");
+
 /*directories*/
 define("BMAG_DIR", get_template_directory());
 /*URLs*/
 define("BMAG_URL", get_template_directory_uri());
-
+define("BMAG_IMG", BMAG_URL.'/images/');
+define("BMAG_IMG_INC", BMAG_URL.'/inc/images/');
 require_once('inc/index.php');
 if ( ! function_exists( 'bmag_setup' ) ) :
 /**
@@ -160,7 +164,7 @@ require get_template_directory() . '/inc/extras.php';
 /**
  * Customizer additions.
  */
-require get_template_directory() . '/inc/customizer.php';
+require get_template_directory() . '/inc/customizer/customizer.php';
 
 /**
  * Load Jetpack compatibility file.
