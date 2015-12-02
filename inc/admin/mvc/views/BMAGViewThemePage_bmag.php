@@ -24,6 +24,14 @@ class BMAGViewThemePage_bmag{
 	/*==========Public Methods==========*/
 	public function display(){
 		?>
+		<style type="text/css">
+		.bmag_stop::after{
+		    content: " <?php _e('Saved','bmag') ?>";
+		    font-size: 15px;
+		    line-height: 23px;
+		    font-family: sans-serif;
+		}
+		</style>
 		<div class="wrap" id="bmag_theme_options">
 			<div class="bmag_header">
 				<div class="bmag_logo">
@@ -45,6 +53,7 @@ class BMAGViewThemePage_bmag{
 				<button id="bmag_reset_tab_infobar" class="button button-secondary form_btn"><?php _e('Reset Tab','bmag'); ?></button>
 				<button id="bmag_save_tab_infobar" class="button button-secondary"><?php _e('Save Tab','bmag'); ?></button>
 				<button id="bmag_save_infobar" class="button button-primary"><?php _e('Save All','bmag'); ?></button>
+				<span class="bmag_spinner fa fa-spinner bmag_hidden"></span>
 				<div class="clear"></div>
 			</div>
 			<div class="bmag_body">
@@ -85,8 +94,9 @@ class BMAGViewThemePage_bmag{
 					</form>
 				</div>
 				<div class="clear"></div>
-				<div class="bmag_save_bar">
+				<div class="bmag_save_bar" style="text-align:center">
 					<button id="bmag_reset_savebar" class="button button-secondary"><?php _e('Reset Defaults','bmag'); ?></button>
+					<span class="bmag_spinner fa fa-spinner bmag_hidden" ></span>
 					<button id="bmag_save_savebar" class="button button-primary"><?php _e('Save Changes','bmag'); ?></button>
 					<div class="clear"></div>
 				</div>

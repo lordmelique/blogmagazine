@@ -93,7 +93,7 @@ bmag_admin_controller.bindEvents = function() {
 	this.settingsForm.submit(function() {
 		jQuery(this).ajaxSubmit({
 			success: function(response) {
-				controller.updateForm();
+				controller.formSaved();
 			}
 		});
 		return false;
@@ -107,6 +107,9 @@ bmag_admin_controller.bindEvents = function() {
  */
 bmag_admin_controller.submitForm = function(task) {
 	//update hidden field
+	this.globalContainer.find('.bmag_spinner').each(function(){
+		jQuery(this).removeClass('bmag_hidden').removeClass('bmag_stop').addClass('fa-spinner');
+	});
 	this.settingsForm.find('#bmag_task').val(task);
 	this.lastRequestTask = task;
 	this.settingsForm.trigger('submit');
@@ -114,49 +117,13 @@ bmag_admin_controller.submitForm = function(task) {
 
 
 /**
- * makes ajax request and gets current saved options
- * and also last resquest tasks, then it updates form elements
- * based on response
+ * Hides spinner and adds checked icon
  */
-bmag_admin_controller.updateForm = function() {
-	controller = this;
-	jQuery.ajax({
-		type: "POST",
-		url: bmag_admin.ajax_url,
-		datatype: 'json',
-		data: {
-			action: 'bmag_get_options',
-			nonce: bmag_admin.bmag_options_nonce,
-		},
-		success: function(response) {
-			var tab = controller.lastRequestTask.split('-')[1],
-				inputs;
-			if(tab != 'all'){
-			   inputs = controller.settingsForm.find('[tab="bmag_'+tab+'_tab"] .bmag_field_content .optioninput');
-			}else{
-				inputs = controller.settingsForm.find('.bmag_field_content .optioninput');	
-			}
-
-			inputs.each(function(){
-				var inputType = jQuery(this).children(0)[0]['nodeName'];
-				console.log(inputType);
-				///!!!!TODO write switch case for all possible form elements
-				//http://www.w3schools.com/html/html_form_elements.asp
-				switch(inputType){
-					case 'select':{
-						break
-					}
-					case 'checkbox':{
-						break;
-					}
-					case 'radio':{
-						break;
-					}
-					case 'textarea':{
-						break;
-					}
-				}
-			});
-		}
+bmag_admin_controller.formSaved = function(){
+	this.globalContainer.find('.bmag_spinner').each(function(){
+		var spinner = jQuery(this).removeClass('fa-spinner').addClass('fa-check').addClass('bmag_stop');
+		setTimeout(function(){
+			spinner.addClass('bmag_hidden').removeClass('fa-check');
+		},6000);
 	});
-}
+};

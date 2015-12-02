@@ -5,7 +5,7 @@ add_action( 'admin_init', 'bmag_register_settings' );
 add_action( 'admin_enqueue_scripts', 'bmag_admin_enqueue_scripts' );
 add_action( 'option_' . BMAG_OPT, 'bmag_options_mix_defaults' );
 add_action( 'after_setup_theme', 'bmag_options_init', 10, 2 );
-add_action( 'wp_ajax_bmag_get_options', 'bmag_get_options' );
+
 
 /**
  * Creates Theme menu page
@@ -123,6 +123,10 @@ function bmag_register_settings(){
 function bmag_admin_enqueue_scripts() {
 	wp_enqueue_script( 'jquery' );
 	wp_enqueue_script( 'jquery-form', array( 'jquery' ) );
+	wp_enqueue_script( 'jquery-color' , array( 'jquery' ));
+	wp_enqueue_script('wp-color-picker');
+    wp_enqueue_style('wp-color-picker');
+
 	wp_enqueue_script( 'themepagecontroller', BMAG_URL . '/inc/js/themepagecontroller.js', array('jquery'), BMAG_VERSION);
 	wp_localize_script( 'themepagecontroller', 'bmag_admin', array(
 				'ajax_url' => admin_url( 'admin-ajax.php' ),
@@ -457,17 +461,3 @@ function bmag_options_init() {
 }
 
 
-/**
- * Sends global $bmag_optoons and $bmag_requested_action as response
- *
- */
-function bmag_get_options(){
-	global $bmag_options;
-	$nonce = isset($_POST['nonce']) ? $_POST['nonce'] : ''; 
-	if( !wp_verify_nonce( $nonce, 'bmag_get_current_options' ) ){
-		wp_die("Wrong NOnce");
-	}else{
-		echo json_encode($bmag_options);
-		wp_die();
-	}
-}
