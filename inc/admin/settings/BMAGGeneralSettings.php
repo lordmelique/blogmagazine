@@ -42,7 +42,19 @@ class BMAGGeneralSettings{
 	        'tab' => $this->settings_tab,
 	        'default' => 'right-top',
 	        'customizer' => array() 
-	      )
+	      ),
+	      	'demo_option3' => array( 
+	        'name' => 'demo_option3', 
+	        'title' => __( 'Color', 'bmag' ), 
+	        'type' => 'color', 
+	        'description' => __( 'This is demo option 3', 'bmag' ), 
+	        'show' => array(),
+	        'hide' => array(),
+	        'section' => 'demo_section', 
+	        'tab' => $this->settings_tab, 
+	        'default' => '#000000',
+	        'customizer' => array(),
+	      ),
         );
 	}
 }
