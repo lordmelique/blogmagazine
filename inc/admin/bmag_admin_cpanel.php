@@ -300,7 +300,7 @@ function bmag_options_validate( $options ){
 	
 	require_once( BMAG_DIR . '/inc/admin/framework/BMAGInputs.php' );
 
-	//$options = bmag_option_validator( $options );
+	// $options = bmag_options_validator( $options );
 
 	return apply_filters( 'bmag_sanitize_options', $options );
 }
