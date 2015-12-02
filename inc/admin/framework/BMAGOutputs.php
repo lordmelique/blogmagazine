@@ -10,7 +10,7 @@ class BMAGOutputs{
 			"textarea_height" => "150",
 			"textarea_width" => "450",
 			"select_width" => "240",
-			"multiple_select_width" => '450',
+			"multiple_select_width" => '240',
 			"upload_size" => "30",
 			"upload_filetype" => "image",
 		);
