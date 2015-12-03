@@ -11,7 +11,7 @@ class BMAGGeneralSettings{
 	      	'demo_option1' => array( 
 	        'name' => 'demo_option1', 
 	        'title' => __( 'Custom CSS', 'bmag' ), 
-	        'type' => 'checkbox', 
+	        'type' => 'range', 
 	        'description' => __( 'This is demo option 1', 'bmag' ), 
 	        'show' => array(),
 	        'hide' => array(),

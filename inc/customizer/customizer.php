@@ -58,7 +58,7 @@ function bmag_customizer_add_panels($wp_customize ){
   }
   /*move standard WP sections to general panel*/
   
-  $general_links_priority = 7;//$wp_customize->get_section( 'general_links' )->priority;
+  $general_links_priority = $wp_customize->get_section( 'demo_section' )->priority;//this is the last section name in general settings
 
   $core_sections = array('title_tagline','header_image','background_image','static_front_page');
   $core_sections_priority = $general_links_priority+1;
@@ -188,7 +188,7 @@ function bmag_customizer_add_scripts(){
   wp_enqueue_script('media-upload');
   add_thickbox();
   wp_enqueue_script( 'bmag_jquery-show', BMAG_URL.'/inc/js/jquery-show.js',array( 'jquery'), BMAG_VERSION);
-  wp_enqueue_script( 'bmag_customizer-preview', BMAG_URL.'/inc/lib/BMAG_elements.js',array( 'jquery','wp-color-picker','bmag_jquery-show' ), BMAG_VERSION, true);
+  wp_enqueue_script( 'bmag_customizer-preview', BMAG_URL.'/inc/js/BMAG_elements.js',array( 'jquery','wp-color-picker','bmag_jquery-show' ), BMAG_VERSION, true);
 
   wp_localize_script( 'bmag_customizer-preview', 'bmag_slide_warning', __("You cannot delete the last slide! Try to turn off the slider", 'bmag') );
   

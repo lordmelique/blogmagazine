@@ -97,7 +97,7 @@ class BMAGOutputs{
 				break;
 			}
 			case 'range' : {
-				echo $this->range();
+				echo $this->range($option, $context, $opt_val, $meta);
 				break;
 			}
 			default : {
@@ -1245,8 +1245,8 @@ class BMAGOutputs{
 		?>
 		<div class="bmag_param" id="bmag_wrap_<?php echo $element['name']; ?>">
 			<div class="block margin">
-				<div class="optioninput">
-					<input type="range" name="<?php echo $optionname; ?>" id="<?php echo $element['name']; ?>" <?php $this->custom_attrs($element); ?> value="<?php echo esc_attr($opt_val); ?>" ?>">
+				<div class="optioninput slider">
+					<input type="range" name="<?php echo $optionname; ?>" id="<?php echo $element['name']; ?>" <?php $this->custom_attrs($element); ?> value="<?php echo esc_attr($opt_val); ?>">
 				</div>
 			</div>
 		</div>

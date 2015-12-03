@@ -130,7 +130,7 @@ add_action( 'widgets_init', 'bmag_widgets_init' );
  */
 function bmag_scripts() {
 
-	wp_enqueue_style( 'font-awesome', BMAG_DIR . '/inc/css/font-awesome/font-awesome.css');
+	wp_enqueue_style( 'bmag-font-awesome', BMAG_URL . '/inc/css/font-awesome/font-awesome.css',array(), BMAG_VERSION);
 
 	wp_enqueue_style( 'bmag-style', get_stylesheet_uri() );
 

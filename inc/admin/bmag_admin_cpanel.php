@@ -296,12 +296,14 @@ function bmag_field_callback( $option, $context = 'option', $opt_val ='', $meta 
  */
 function bmag_options_validate( $options ){
 
-	
-	
-	require_once( BMAG_DIR . '/inc/admin/framework/BMAGInputs.php' );
-
-	// $options = bmag_options_validator( $options );
-
+	$options = bmag_options_validator( $options );
+	//IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT
+	//IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT
+	//IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT 
+	//ape es function-@ mekel sanitizer@ stexic hani tar BMAGInputs
+	//vor havai erku hat hamarya nuyn anunov funcia chunenaq
+	//u vor petq @lni qtnel imananq vor esi inpu a petqa inputum nayenq
+	//mekel axpor pes prci es anteric !!!!!!!!!!!!!!!
 	return apply_filters( 'bmag_sanitize_options', $options );
 }
 
@@ -437,7 +439,8 @@ function bmag_options_mix_defaults( $options ){
  * Initializes theme options, if update needed updates them
  */
 function bmag_options_init() {
-  global $bmag_option,$bmag_outputs;
+  global $bmag_options;
+  global $bmag_outputs;
 
   require_once( BMAG_DIR . '/inc/admin/framework/BMAGOutputs.php' );
   $bmag_outputs = new BMAGOutputs();
