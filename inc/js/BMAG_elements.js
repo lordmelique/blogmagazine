@@ -115,11 +115,7 @@ var bmag_elements = {
 		globalParent.find('.bmag_multi_drop li').filter('[value=' + value + ']').removeClass('bmag_option_selected');
 	},
 	toggle_custom_checkbox: function(label) {
-		if (label.hasClass('fa-toggle-on')) {
-			label.removeClass('fa-toggle-on').addClass('fa-toggle-off');
-		} else if (label.hasClass('fa-toggle-off')) {
-			label.removeClass('fa-toggle-off').addClass('fa-toggle-on');
-		}
+		label.toggleClass('fa-rotate-180');
 	},
 	checkbox_open: function(element) {
 

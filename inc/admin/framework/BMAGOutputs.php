@@ -174,7 +174,7 @@ class BMAGOutputs{
 		} 
 	
 
-		$toggleClass = ($opt_val == 'on') ? 'fa-toggle-on' : 'fa-toggle-off';
+		$toggleClass = ($opt_val == 'on') ? 'fa-toggle-on' : 'fa-toggle-on fa-rotate-180';
 		?>
 		<div class="bmag_param" id="bmag_wrap_<?php echo $element['name']; ?>">
 			<div class="block margin">

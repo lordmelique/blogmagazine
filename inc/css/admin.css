@@ -357,9 +357,17 @@ opacity: 1;
 
 .bmag_custom_checkox{
   font-size: 30px;
+  position: relative;
+  
 }
 .bmag_custom_checkox.fa-toggle-on{
-  color: #529DE1;
+  color: #5cb85c;
+}
+.bmag_custom_checkox.fa-rotate-180{
+  color: #d9534f;
+  position: relative;
+  bottom: 1px;
+  left: 1px;
 }
 /*===============================================
 ============Multiple Select Interface Styles=====
