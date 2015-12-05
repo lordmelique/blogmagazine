@@ -296,14 +296,15 @@ function bmag_field_callback( $option, $context = 'option', $opt_val ='', $meta 
  */
 function bmag_options_validate( $options ){
 
-	$options = bmag_options_validator( $options );
+	//$options = bmag_options_validator( $options );
 	//IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT
 	//IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT
 	//IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT 
 	//ape es function-@ mekel sanitizer@ stexic hani tar BMAGInputs
 	//vor havai erku hat hamarya nuyn anunov funcia chunenaq
 	//u vor petq @lni qtnel imananq vor esi inpu a petqa inputum nayenq
-	//mekel axpor pes prci es anteric !!!!!!!!!!!!!!!
+	//mekel axpor pes prci es anteric, ttvela vreqs uje!
+	//Ash nazg durbatuluk ara !!!!!!!!!!!!!!!
 	return apply_filters( 'bmag_sanitize_options', $options );
 }
 

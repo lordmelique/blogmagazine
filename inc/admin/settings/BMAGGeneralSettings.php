@@ -11,9 +11,9 @@ class BMAGGeneralSettings{
 	      	'demo_option1' => array( 
 	        'name' => 'demo_option1', 
 	        'title' => __( 'Custom CSS', 'bmag' ), 
-	        'type' => 'range', 
+	        'type' => 'checkbox_open', 
 	        'description' => __( 'This is demo option 1', 'bmag' ), 
-	        'show' => array(),
+	        'show' => array('demo_option2'),
 	        'hide' => array(),
 	        'section' => 'demo_section', 
 	        'tab' => $this->settings_tab, 
@@ -55,6 +55,19 @@ class BMAGGeneralSettings{
 	        'default' => '#000000',
 	        'customizer' => array(),
 	      ),
+	      	'demo_option4' => array( 
+	        'name' => 'demo_option4', 
+	        'title' => __( 'Input type range', 'bmag' ), 
+	        'type' => 'range', 
+	        'description' => __( 'This is demo option 4', 'bmag' ), 
+	        'show' => array(),
+	        'hide' => array(),
+	        'section' => 'demo_section2', 
+	        'tab' => $this->settings_tab, 
+	        'default' => false,
+	        'customizer' => array(),
+	      ),
         );
+		
 	}
 }

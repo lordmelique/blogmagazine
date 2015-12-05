@@ -1,7 +1,6 @@
 .clear{
 	clear:both;
 }
-
 .bmag_header{
 	height: 70px;
     background: #f1f1f1;
@@ -93,6 +92,16 @@
 	float: right;
 }
 
+.bmag_expand_options{
+      float: left;
+    padding: 0 7px;
+    height: 23px;
+    /* line-height: 23px; */
+    font-size: 23px;
+}
+.bmag_expand_options:hover{
+  cursor: pointer;
+}
 @-moz-keyframes bmag_spin{
     from {transform: rotate(0deg);}
     to {transform: rotate(360deg);}
@@ -191,6 +200,7 @@ opacity: 1;
     width: 78%;
     margin-left: -1px;
     padding: 0 1%;
+    padding-bottom: 10px;
     font-family: "Lucida Grande", Sans-serif;
     background-color: #FCFCFC;
     border-left: 1px solid #d8d8d8;
@@ -205,6 +215,16 @@ opacity: 1;
 	/* Rules below not implemented in browsers yet */
 	-o-user-select: none;
 	user-select: none;
+}
+.bmag_info_bar,
+.bmag_save_bar{
+    -webkit-user-select: none; /* Chrome/Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+ */
+
+    /* Rules below not implemented in browsers yet */
+    -o-user-select: none;
+    user-select: none;
 }
 
 .bmag_settings_tab{
@@ -282,6 +302,23 @@ opacity: 1;
 }
 
 
+.bmag_expanded .bmag_form_container{
+  width: 96%;
+  padding: 0 2%;
+  padding-bottom: 10px;
+}
+.bmag_expanded .bmag_settings_tab{
+  display: block;
+}
+.bmag_expanded #bmag_save_tab_infobar,
+.bmag_expanded #bmag_reset_tab_infobar,
+.bmag_expanded .bmag_nav_tabs{
+  display: none;
+}
+
+
+
+
 @media screen and (min-width: 0px) and (max-width: 610px){
 	.bmag_header{
 		height: auto;
@@ -298,6 +335,7 @@ opacity: 1;
 	}
 	.bmag_info_bar{
 		height: auto;
+    padding-right: 10px;
 	}
 	.bmag_nav_tab_title{
 		display: none;
@@ -308,7 +346,21 @@ opacity: 1;
 }
 
 
+/*===============================================
+============BMAGOutputs Styles===================
+================================================*/
 
+.bmag_hidden_option{
+  display: none !important; /*some styles from load-styles.php are settings display to inline block*/
+}
+
+
+.bmag_custom_checkox{
+  font-size: 30px;
+}
+.bmag_custom_checkox.fa-toggle-on{
+  color: #529DE1;
+}
 /*===============================================
 ============Multiple Select Interface Styles=====
 ================================================*/
