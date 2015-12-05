@@ -284,44 +284,6 @@ function bmag_field_callback( $option, $context = 'option', $opt_val ='', $meta 
 	global $bmag_outputs;
 	$bmag_outputs->render_field( $option, $context, $opt_val, $meta );
 }
-/**
- * Validates all settings getted from settings form
- *
- * If any option is not valid replaces option with its default
- * Then returns validated options with bmag_sanitize_options hook attached
- *
- * @param $options
- * @return $options
- *
- */
-function bmag_options_validate( $options ){
-
-	//$options = bmag_options_validator( $options );
-	//IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT
-	//IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT
-	//IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT 
-	//ape es function-@ mekel sanitizer@ stexic hani tar BMAGInputs
-	//vor havai erku hat hamarya nuyn anunov funcia chunenaq
-	//u vor petq @lni qtnel imananq vor esi inpu a petqa inputum nayenq
-	//mekel axpor pes prci es anteric, ttvela vreqs uje!
-	//Ash nazg durbatuluk ara !!!!!!!!!!!!!!!
-	return apply_filters( 'bmag_sanitize_options', $options );
-}
-
-/**
- * Salitizes all settings getted from bmag_option_validate() function
- *
- * If any option is not valid replaces option with it's default
- * 
- * @param $options
- * @return $options
- *
- */
-function bmag_options_sanitizer( $options ){
-
-	return $options;
-}
-add_filter( 'bmag_sanitize_options', 'bmag_options_sanitizer' );
 
 
 

@@ -225,7 +225,7 @@ class BMAGOutputs{
 			$opt_val = $opt_val ? 'true' : '';
 		} 
 
-		$toggleClass = ($opt_val == 'on') ? 'fa-toggle-on' : 'fa-toggle-off';
+		$toggleClass = ($opt_val == 'on') ? 'fa-toggle-on' : 'fa-toggle-on fa-rotate-180';
 
 		?>
 		<div class="bmag_param" id="bmag_wrap_<?php echo $element['name']; ?>">
@@ -1241,7 +1241,6 @@ class BMAGOutputs{
 	
 	/**
 	 * Displays a range field 
-	 * RRR does not work!!!
 	 */
 
 	public function range($element, $context = 'option', $opt_val = '', $meta=array()){
