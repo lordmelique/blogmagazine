@@ -19,6 +19,7 @@ bmag_admin_controller.init = function() {
 	this.resetTabTopBtn = this.globalContainer.find('#bmag_reset_tab_infobar');
 	this.navigationTabs = this.globalContainer.find('.bmag_nav_tab');
 	this.settingsTabs = this.globalContainer.find('.bmag_settings_tab');
+	this.expandOptions = this.globalContainer.find('.bmag_expand_options');
 	//binding necessary events
 	this.bindEvents();
 }
@@ -98,6 +99,11 @@ bmag_admin_controller.bindEvents = function() {
 		});
 		return false;
 	});
+
+	this.expandOptions.on('click',function(){
+		controller.toggleOptions();
+	})
+
 }
 
 
@@ -121,10 +127,14 @@ bmag_admin_controller.submitForm = function(task) {
  */
 bmag_admin_controller.formSaved = function(){
 	this.globalContainer.find('.bmag_spinner').each(function(){
-		var spinner = jQuery(this).removeClass('fa-spinner').addClass('fa-check').addClass('bmag_stop');
+		var spinner = jQuery(this).removeClass('fa-spinner').addClass('bmag_stop');
 		setTimeout(function(){
 			spinner.addClass('bmag_hidden').removeClass('fa-check');
-		},6000);
+		},3000);
 	});
 };
 
+bmag_admin_controller.toggleOptions = function (){
+	this.expandOptions.toggleClass('fa-times').toggleClass('fa-reorder');
+	this.globalContainer.toggleClass('bmag_expanded');
+}

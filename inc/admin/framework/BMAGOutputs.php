@@ -105,7 +105,7 @@ class BMAGOutputs{
 			}    
 		}
 		if( isset( $option['description']) && $option['description'] != '' ) : ?>
-			<label class="description" for="<?php echo $option['name'] ?>"><?php echo esc_html($option['description']); ?></label>
+			<span class="description"><?php echo esc_html($option['description']); ?></span>
 		<?php endif;
  	}
 
@@ -171,12 +171,16 @@ class BMAGOutputs{
 		
 		if(is_bool($opt_val)){
 			$opt_val = $opt_val ? 'true' : '';
-		} ?>
+		} 
+	
 
+		$toggleClass = ($opt_val == 'on') ? 'fa-toggle-on' : 'fa-toggle-on fa-rotate-180';
+		?>
 		<div class="bmag_param" id="bmag_wrap_<?php echo $element['name']; ?>">
 			<div class="block margin">
 				<div class="optioninput checkbox">
-					<input type="checkbox" class="checkbox" name="<?php echo $optionname; ?>" id="<?php echo $element['name'] ?>" <?php checked($opt_val || $opt_val =='on'); ?> <?php $this->custom_attrs($element); ?>>
+					<label id="<?php echo $element["name"] ?>_label" for="<?php echo $element['name'] ?>" class="bmag_custom_checkox fa <?php echo $toggleClass; ?>" onclick="bmag_elements.toggle_custom_checkbox(jQuery(this))"></label>
+					<input type="checkbox" class="checkbox bmag_hidden_option" name="<?php echo $optionname; ?>" id="<?php echo $element['name'] ?>" <?php checked($opt_val || $opt_val =='on'); ?> <?php $this->custom_attrs($element); ?>>
 				</div>
 			</div>
 		</div>
@@ -187,6 +191,7 @@ class BMAGOutputs{
           if(jQuery('#<?php echo $element["name"] ?>').attr('checked') != 'checked'){
              jQuery('#<?php echo $element["name"] ?>').after('<input type=\"hidden\" name=\"' + jQuery('#<?php echo $element["name"] ?>').attr("name") + '\" value="0">');
           }
+
           jQuery('#<?php echo $element["name"] ?>').on('click',function(){
             if (jQuery(this).attr("checked") != 'checked') {
                        jQuery(this).after("<input type=\"hidden\" name=\"" + jQuery(this).attr("name") + "\" value=0>");
@@ -194,6 +199,7 @@ class BMAGOutputs{
                        jQuery(this).next().remove();
                     }
           });
+
       });
       </script>
 		<?php   
@@ -217,11 +223,16 @@ class BMAGOutputs{
 		}
 		if(is_bool($opt_val)){
 			$opt_val = $opt_val ? 'true' : '';
-		} ?>
+		} 
+
+		$toggleClass = ($opt_val == 'on') ? 'fa-toggle-on' : 'fa-toggle-on fa-rotate-180';
+
+		?>
 		<div class="bmag_param" id="bmag_wrap_<?php echo $element['name']; ?>">
 			<div class="block margin">
 				<div class="optioninput checkbox">
-					<input type="checkbox" class="checkbox" name="<?php echo $optionname; ?>" id="<?php echo $element['name'] ?>" <?php checked($opt_val || $opt_val =='on'); ?>  <?php $this->custom_attrs($element); ?> value="<?php echo esc_attr($opt_val); ?>">
+					<label id="<?php echo $element["name"] ?>_label" for="<?php echo $element['name'] ?>" class="bmag_custom_checkox fa <?php echo $toggleClass; ?>" onclick="bmag_elements.toggle_custom_checkbox(jQuery(this))"></label>
+					<input type="checkbox" class="checkbox bmag_hidden_option" name="<?php echo $optionname; ?>" id="<?php echo $element['name'] ?>" <?php checked($opt_val || $opt_val =='on'); ?>  <?php $this->custom_attrs($element); ?> >
 				</div>
 			</div>
 		</div>
@@ -1230,7 +1241,6 @@ class BMAGOutputs{
 	
 	/**
 	 * Displays a range field 
-	 * RRR does not work!!!
 	 */
 
 	public function range($element, $context = 'option', $opt_val = '', $meta=array()){
