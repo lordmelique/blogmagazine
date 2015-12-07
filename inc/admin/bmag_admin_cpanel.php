@@ -76,26 +76,8 @@ function bmag_register_settings(){
 			$settingtype    = $setting['type'];
 			$settingsection = $setting['section'];
 			
-			if( 'custom' != $settingtype ){
-				add_settings_field( 
-					// String for use in the 'id' attribute of tags.
-					BMAG_VAR . '_setting_' . $settingname,
-					// Title of the field.
-					$settingtitle,
-					/* Function that fills the field with the desired inputs as part of the larger form.
-					  Passed a single argument, the $args array. Name and id of the input should match the $id given to this function.
-					  The function should echo its output.*/
-					'bmag_field_callback',
-					// The menu page on which to display this field. Should match $menu_slug from add_theme_page() or from do_settings_sections(). 
-					'bmag_' . $settingtab . '_tab',
-					/* The section of the settings page in which to show the box (default or a section you added with add_settings_section(),
-					   look at the page in the source to see what the existing ones are.) */
-					'bmag_' . $settingsection . '_section',
-					// Additional arguments that are passed to the $callback function.
-					$setting 
-				);
-			} else {
-				add_settings_field( 
+			
+			add_settings_field( 
 				// String for use in the 'id' attribute of tags.
 				BMAG_VAR . '_setting_' . $settingname,
 				// Title of the field.
@@ -103,14 +85,16 @@ function bmag_register_settings(){
 				/* Function that fills the field with the desired inputs as part of the larger form.
 				  Passed a single argument, the $args array. Name and id of the input should match the $id given to this function.
 				  The function should echo its output.*/
-				'bmag_field_callback_' . $settingname,
+				'bmag_field_callback',
 				// The menu page on which to display this field. Should match $menu_slug from add_theme_page() or from do_settings_sections(). 
 				'bmag_' . $settingtab . '_tab',
 				/* The section of the settings page in which to show the box (default or a section you added with add_settings_section(),
 				   look at the page in the source to see what the existing ones are.) */
-				'bmag_' . $settingsection . '_section'
+				'bmag_' . $settingsection . '_section',
+				// Additional arguments that are passed to the $callback function.
+				$setting 
 			);
-			}
+			
 		} 
 	}
 }
@@ -182,6 +166,20 @@ function bmag_get_tabs(){
 		'icon' => 'fa fa-home',
 		'description' => bmag_tab_descr( 'home' )
 	);
+
+	$tabs['header'] = array(
+		'name' => 'header',
+		'title' => __( 'Header', 'bmag' ),
+		'sections' => array(
+		  'header_layouting' => array(
+			'name' => 'header_layouting',
+			'title' => __( 'Layout', 'bmag' ),
+			'description' => 'Here you can change how header can be changed'
+		  ),
+		),
+		'icon' => 'fa fa-header',
+		'description' => bmag_tab_descr( 'header' )
+	);
 	return apply_filters( 'bmag_get_tabs', $tabs );
 }
 
@@ -212,6 +210,9 @@ function bmag_get_all_settings(){
 
 	require_once( BMAG_DIR . '/inc/admin/settings/BMAGHomeSettings.php' );
 	$settings_by_tabs['home'] = new BMAGHomeSettings();
+
+	require_once( BMAG_DIR . '/inc/admin/settings/BMAGHeaderSettings.php' );
+	$settings_by_tabs['header'] = new BMAGHeaderSettings();
 
 
 	foreach ( $settings_by_tabs as $tab ) {
@@ -264,6 +265,10 @@ function bmag_tab_descr( $tabname ){
 			return __('This is demo description for home tab','bmag');
 			break;
 		}
+		case 'header':{
+			return __('This is header description','bmag');
+			break;
+		}
 		default:{
 			return '';
 		}
@@ -282,7 +287,13 @@ function bmag_section_callback(){
  */
 function bmag_field_callback( $option, $context = 'option', $opt_val ='', $meta = array() ) {
 	global $bmag_outputs;
-	$bmag_outputs->render_field( $option, $context, $opt_val, $meta );
+	if('custom' != $option['type']){
+		$bmag_outputs->render_field( $option, $context, $opt_val, $meta );
+	}else{
+		$custom_function = 'custom_'.$option['name'];
+		$bmag_outputs->$custom_function( $option, $context, $opt_val, $meta );
+	}
+	
 }
 /**
  * Validates all settings getted from settings form

@@ -1290,5 +1290,41 @@ class BMAGOutputs{
 		}
 		return $result; 
 	}
+
+
+	/**
+	* custom input type callbacks
+	*/
+	public function custom_header_layout( $element, $context = 'option', $opt_val = '', $meta=array()){
+		$i = 1;
+		if($context== 'meta'){
+			$optionname = BMAG_META.'[' .$element['name']. ']';
+		}
+		else{
+			global $bmag_options;
+			$optionname = BMAG_OPT.'[' .$element['name']. ']';
+			$opt_val = $bmag_options[$element['name']];
+		} ?>
+		<div class="bmag_param" style="text-align:center;" id="bmag_wrap_<?php echo $element['name']; ?>">
+		<?php  foreach ( $element['valid_options'] as $key => $option ) { ?>
+			<div style="display:inline-block;padding:10px;">
+			<?php $src = BMAG_URL. '/inc/images/header_style'.$i.'.png';?>
+			<label style="display:inline-block" class="bmag_custom_<?php echo $element['name']; ?>_<?php echo $key; ?>" for="bmag_custom_<?php echo $element['name']; ?>_<?php echo $key?>"><img style="width:150px;display:block;pointer-events:none" src="<?php echo $src;?>"></label><br>
+			<input style="margin-top:5px" type="radio" id="bmag_custom_<?php echo $element['name']; ?>_<?php echo $key?>" name="<?php echo $optionname; ?>" <?php checked( $key, $opt_val ); ?> <?php $this->custom_attrs($element); ?> value="<?php echo esc_attr($key); ?>" /> <?php echo esc_html($option); ?>
+			</div>
+		<?php $i++; } ?>
+		</div>
+		<?php
+	}
+
 }
+
+
+
+
+
+
+
+
+
 ?>
