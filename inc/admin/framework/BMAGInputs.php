@@ -12,20 +12,6 @@
  */
 function bmag_options_validate( $input ){
 
-	//$options = bmag_options_validator( $options );
-	//IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT
-	//IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT
-	//IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT 
-	//ape es function-@ mekel sanitizer@ stexic hani tar BMAGInputs
-	//vor havai erku hat hamarya nuyn anunov funcia chunenaq
-	//u vor petq @lni qtnel imananq vor esi inpu a petqa inputum nayenq
-	//mekel axpor pes prci es anteric, ttvela vreqs uje!
-	//Ash nazg durbatuluk ara !!!!!!!!!!!!!!!
-
-
-
-	// bmag_get_tab_defaults();
-	
 	global $bmag_options;
 
 	// OPTIONS
@@ -33,93 +19,35 @@ function bmag_options_validate( $input ){
 	$valid_input = $bmag_options;
 	$option_defaults = bmag_get_defaults();
 
+	// SETTINGS WITH ALL THEIR INFO
+
+	$bmag_settings = bmag_get_all_settings();
+
+	// TABS
 
 	$bmag_tabs = bmag_get_tabs();
-
 	$bmag_tabnames = bmag_get_tab_names();
 
+	// INPUT TYPE
 	
 	$input_task = explode( '-', $input['task'] );
 	$input_type = $input_task[0];	
 	$input_name = $input_task[1];
 	unset( $valid_input['task'] );
 
-	
-
-	if ( 'all' == $input_name ) {
-		if ( 'submit' == $input_type ) {
-
-
-
-
-			return $input;
-
-
-
-
-		} else {
+	if ( 'reset' == $input_type ) {
+		if ( 'all' == $input_name ) {
 			return $option_defaults;
+		} else {
+			foreach ( $bmag_tabnames as $tab_name ) {
+				$tab_defaults = bmag_get_tab_defaults( $tab_name );
+				$valid_input = wp_parse_args( $tab_defaults, $valid_input );
+				return $valid_input;	
+			}
 		}
 	} else {
-		foreach ( $bmag_tabnames as $tab_name ) {
-			if ( $input_name == $tab_name ) {
-				if ( 'submit' == $input_type ) {
-
-
-
-					return $input;
-
-
-
-
-
-				} else {
-					$tab_defaults = bmag_get_tab_defaults( $tab_name );
-					$valid_input = wp_parse_args( $tab_defaults, $valid_input );
-					return $valid_input;
-				}
-			}		
-		}
-	}
-
-
-
-
-
-
-
-	$valid_input = $bmag_options;
- 
-	$settingsbytab = bmag_get_settings_by_tab();
-	$option_parameters = bmag_get_option_parameters();
-	$option_defaults = bmag_get_option_defaults();
-	$tabs = bmag_get_tabs();
-	
-	$submittype = 'submit'; 
-	foreach ( $tabs as $tab ) {
-		$resetname = 'reset-' . $tab['name'];
-		if ( ! empty( $input[$resetname] ) ) {
-			$submittype = 'reset';
-		}
-	}
-	
-	foreach ( $tabs as $tab ) {
-		$submitname = 'submit-' . $tab['name'];
-		$resetname = 'reset-' . $tab['name'];
-		if ( ! empty( $input[$submitname] ) || ! empty($input[$resetname] ) ) {
-			$submittab = $tab['name'];
-		}
-	}
-
-	$tabsettings = ( isset ( $submittab ) ? $settingsbytab[$submittab] : $settingsbytab['all'] );
-
-	foreach ( $tabsettings as $setting ) {
-		if ( 'submit' == $submittype ) {
-			$optiondetails = $option_parameters[$setting];
-			$valid_options = ( isset( $optiondetails['valid_options'] ) ? $optiondetails['valid_options'] : false );
-			$sanitize_type = isset($optiondetails['sanitize_type']) ? $optiondetails['sanitize_type'] : '';
-			/* validate according to option type */
-			switch ($optiondetails['type']) :
+		foreach ( $bmag_settings as $setting ) {
+			switch ($setting['type']) :
 				case 'color':
 					$valid_input[$setting] = bmag_param_clean($input[$setting], $valid_input[$setting], 'color', $sanitize_type);
 				break;
@@ -178,18 +106,6 @@ function bmag_options_validate( $input ){
 				default:
 					/*do nothing*/
 			endswitch;
-		} 
-		elseif ( 'reset' == $submittype ) {
-			$valid_input[$setting] = $option_defaults[$setting];
-		}
-		/*set background color*/
-		if(isset($optiondetails['mod']) && $optiondetails['mod']){
-			if($setting == 'background_color'){
-			set_theme_mod($setting, str_replace('#','',$valid_input[$setting]));  
-			}
-			else{
-			set_theme_mod($setting, $valid_input[$setting]);   
-			}
 		}
 	}
 
