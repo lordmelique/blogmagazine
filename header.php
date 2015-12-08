@@ -19,29 +19,107 @@
 
 <?php wp_head(); ?>
 </head>
+<?php  
+global $bmag_front;
+global $bmag_front_output;
+$header_image = get_header_image();
+
+
+
+
+?>
+
+
 
 <body <?php body_class(); ?>>
+
 <div id="page" class="site">
 	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'bmag' ); ?></a>
 
-	<header id="masthead" class="site-header" role="banner">
-		<div class="site-branding">
-			<?php if ( is_front_page() && is_home() ) : ?>
-				<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
-			<?php else : ?>
-				<p class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></p>
-			<?php endif;
+	<header class="site-header" role="banner">
 
-			$description = get_bloginfo( 'description', 'display' );
-			if ( $description || is_customize_preview() ) : ?>
-				<p class="site-description"><?php echo $description; /* WPCS: xss ok. */ ?></p>
-			<?php endif; ?>
-		</div><!-- .site-branding -->
+		 <?php if(! empty($header_image)){  ?>
+		    <div class="header-container">
+				<a class="custom-header-a" href="<?php echo esc_url( home_url( '/' ) ); ?>">
+					<img src="<?php echo header_image(); ?>" class="custom-header">	
+				</a>
+			</div>
+		 <?php } ?>
 
-		<nav id="site-navigation" class="main-navigation" role="navigation">
-			<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e( 'Primary Menu', 'bmag' ); ?></button>
-			<?php wp_nav_menu( array( 'theme_location' => 'primary', 'menu_id' => 'primary-menu' ) ); ?>
-		</nav><!-- #site-navigation -->
+		<div id="header">
+			<div class="header-top-banner">
+			<div class="container clearfix">
+			<?php
+
+				
+				wp_nav_menu(array(
+					'theme_location'  => 'top_menu_bar',
+					'menu'            => '',
+					'container'       => 'div',
+					'container_class' => '',
+					'container_id'    => '',
+					'menu_class'      => 'menu',
+					'menu_id'         => '',
+					'echo'            => true,
+					'fallback_cb'     => '',
+					'before'          => '',
+					'after'           => '',
+					'link_before'     => '',
+					'link_after'      => '',
+					'items_wrap'      => '<ul id="%1$s" class="%2$s float-left">%3$s</ul>',
+					'depth'           => -1,
+					'walker'          => ''
+				));
+
+				$social_menu = array(
+					'parent_tag' => 'ul',
+					'parent_id' => '',
+					'parent_class' =>'',
+					'child_tag' => 'li.div.div.div.a',
+					'child_class'=> 'valodik hasmik qyababv.samsonchik tup',
+					'items' => array(
+						array(
+							'font_awesome' => 'fa fa-facebook',
+							'name' => esc_html__('Facebook','bmag'),
+							'url' => '#',
+							'custom_class' => '',
+							'url_pos' => 7
+							),
+						array(
+							'font_awesome' => 'fa fa-twitter',
+							'name' => esc_html__('Twitter','bmag'),
+							'url' => '#',
+							'custom_class' => '',
+							'url_pos' => 7,
+							),
+						array(
+							'font_awesome' => 'fa fa-vk',
+							'name' => esc_html__('Vkontakte','bmag'),
+							'url' => '#',
+							'custom_class' => '',
+							'url_pos' => 7
+							),
+						array(
+							'font_awesome' => 'fa fa-instagram',
+							'name' => esc_html__('Instagram','bmag'),
+							'url' => '#',
+							'custom_class' => '',
+							'url_pos' => 7
+							),
+						)
+					);
+				$bmag_front_output->display_custom_menu($social_menu);
+
+				?>
+					<ul class="social float-right">
+						<li><a href="#" class="fa fa-facebook"></a></li>
+						<li><a href="#" class="fa fa-twitter"></a></li>
+						<li><a href="#" class="fa fa-vk"></a></li>
+						<li><a href="#" class="fa fa-instagram"></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
 	</header><!-- #masthead -->
 
 	<div id="content" class="site-content">

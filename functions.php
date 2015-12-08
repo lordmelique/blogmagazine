@@ -31,6 +31,7 @@ if ( ! function_exists( 'bmag_setup' ) ) :
  * as indicating support for post thumbnails.
  */
 function bmag_setup() {
+	
 	/*
 	 * Make theme available for translation.
 	 * Translations can be filed in the /languages/ directory.
@@ -60,6 +61,7 @@ function bmag_setup() {
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus( array(
 		'primary' => esc_html__( 'Primary Menu', 'bmag' ),
+		'top_menu_bar' => esc_html__( 'Top Menu Bar','bmag' )
 	) );
 
 	/*
@@ -91,6 +93,10 @@ function bmag_setup() {
 		'default-color' => 'ffffff',
 		'default-image' => '',
 	) ) );
+
+
+	//initialize front globals
+	bmag_init_front_params();
 }
 endif; // bmag_setup
 add_action( 'after_setup_theme', 'bmag_setup' );
@@ -145,6 +151,18 @@ function bmag_scripts() {
 
 }
 add_action( 'wp_enqueue_scripts', 'bmag_scripts' );
+
+/**
+ * Initializes globals $bmag_front and $bmag_front_output
+ */
+function bmag_init_front_params(){
+	global $bmag_front;
+	global $bmag_front_output;
+	require_once(BMAG_DIR . '/inc/front/BMAG_front_functions.php');
+	require_once(BMAG_DIR . '/inc/front/BMAG_front_output.php');
+	$bmag_front = new BMAG_front_functions();
+	$bmag_front_output = new BMAG_front_output();
+}
 
 /**
  * Implement the Custom Header feature.

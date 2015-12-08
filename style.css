@@ -27,6 +27,7 @@ Nicolas Gallagher and Jonathan Neal http://necolas.github.com/normalize.css/
 # Typography
 # Elements
 # Forms
+$ Header Styles
 # Navigation
 	## Links
 	## Menus
@@ -263,6 +264,10 @@ th {
 	padding: 0;
 }
 
+
+
+
+
 /*--------------------------------------------------------------
 # Typography
 --------------------------------------------------------------*/
@@ -381,7 +386,8 @@ hr {
 
 ul,
 ol {
-	margin: 0 0 1.5em 3em;
+	margin: 0;
+	padding: 0;
 }
 
 ul {
@@ -488,6 +494,58 @@ textarea {
 	padding-left: 3px;
 	width: 100%;
 }
+
+
+/*------------------------Header Styles----------------------*/
+.container{
+	width: 1024px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+.float-left{
+	float: left;
+}
+.float-right{
+	float: right;
+}
+header>.header-container{
+	text-align: center;
+}
+header>.container>.custom-header-a,
+header>.container>.custom-header-a img{
+	display: inline-block;
+}
+
+.header-top-banner{
+	background-color: black; /*%%%*/
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+.header-top-banner ul{
+	list-style: none;
+}
+.header-top-banner ul li{
+	display: inline-block;
+}
+.header-top-banner ul li a{
+	text-decoration: none;
+	color: white; /*%%%*/
+	font-size: 15px;
+}
+
+.header-top-banner ul.social li{
+	padding: 0 5px;
+}
+/*------------------------Header Style End-------------------*/
+
 
 /*--------------------------------------------------------------
 # Navigation
