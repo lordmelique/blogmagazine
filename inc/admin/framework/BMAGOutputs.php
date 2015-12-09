@@ -174,7 +174,7 @@ class BMAGOutputs{
 		} 
 	
 
-		$toggleClass = ($opt_val == 'on') ? 'fa-toggle-on' : 'fa-toggle-on fa-rotate-180';
+		$toggleClass = ($opt_val == 'on'  || $opt_val == 'true') ? 'fa-toggle-on' : 'fa-toggle-on fa-rotate-180';
 		?>
 		<div class="bmag_param" id="bmag_wrap_<?php echo $element['name']; ?>">
 			<div class="block margin">
@@ -188,6 +188,7 @@ class BMAGOutputs{
       <script>
       
       jQuery(document).ready(function(){
+
           if(jQuery('#<?php echo $element["name"] ?>').attr('checked') != 'checked'){
              jQuery('#<?php echo $element["name"] ?>').after('<input type=\"hidden\" name=\"' + jQuery('#<?php echo $element["name"] ?>').attr("name") + '\" value="0">');
           }
@@ -224,15 +225,15 @@ class BMAGOutputs{
 		if(is_bool($opt_val)){
 			$opt_val = $opt_val ? 'true' : '';
 		} 
-
-		$toggleClass = ($opt_val == 'on') ? 'fa-toggle-on' : 'fa-toggle-on fa-rotate-180';
+		
+		$toggleClass = ($opt_val == 'on' || $opt_val == 'true') ? 'fa-toggle-on' : 'fa-toggle-on fa-rotate-180';
 
 		?>
 		<div class="bmag_param" id="bmag_wrap_<?php echo $element['name']; ?>">
 			<div class="block margin">
 				<div class="optioninput checkbox">
 					<label id="<?php echo $element["name"] ?>_label" for="<?php echo $element['name'] ?>" class="bmag_custom_checkox fa <?php echo $toggleClass; ?>" onclick="bmag_elements.toggle_custom_checkbox(jQuery(this))"></label>
-					<input type="checkbox" class="checkbox bmag_hidden_option" name="<?php echo $optionname; ?>" id="<?php echo $element['name'] ?>" <?php checked($opt_val || $opt_val =='on'); ?>  <?php $this->custom_attrs($element); ?> >
+					<input type="checkbox" value="1" class="checkbox bmag_hidden_option" name="<?php echo $optionname; ?>" id="<?php echo $element['name'] ?>" <?php checked($opt_val || $opt_val =='on'); ?>  <?php $this->custom_attrs($element); ?> >
 				</div>
 			</div>
 		</div>
@@ -267,6 +268,19 @@ class BMAGOutputs{
 						bmag_elements.checkbox_open(element_<?php echo $element["name"]; ?>);  
 					}
 				});
+
+	
+				if(jQuery('#<?php echo $element["name"] ?>').attr('checked') != 'checked'){
+		             jQuery('#<?php echo $element["name"] ?>').after('<input type=\"hidden\" name=\"' + jQuery('#<?php echo $element["name"] ?>').attr("name") + '\" value="0">');
+		          }
+
+		          jQuery('#<?php echo $element["name"] ?>').on('click',function(){
+		            if (jQuery(this).attr("checked") != 'checked') {
+		                       jQuery(this).after("<input type=\"hidden\" name=\"" + jQuery(this).attr("name") + "\" value=0>");
+		                    } else {
+		                       jQuery(this).next().remove();
+		                    }
+		          });
 			});
 		</script>
 		<?php   

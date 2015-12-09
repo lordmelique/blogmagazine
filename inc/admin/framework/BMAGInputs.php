@@ -46,8 +46,10 @@ function bmag_options_validate( $input ){
 			}
 		}
 	} else {
-		foreach ( $bmag_settings as $setting ) {
-			switch ($setting['type']) :
+		foreach ( $bmag_settings as $_setting ) {
+			$setting = $_setting['name'];
+			
+			switch ($_setting['type']) :
 				case 'color':
 					$valid_input[$setting] = bmag_param_clean($input[$setting], $valid_input[$setting], 'color', $sanitize_type);
 				break;
@@ -109,6 +111,9 @@ function bmag_options_validate( $input ){
 		}
 	}
 
+	
+
+
 	return apply_filters( 'bmag_sanitize_options', $valid_input );
 
 }
@@ -123,7 +128,8 @@ function bmag_options_validate( $input ){
  *
  */
 function bmag_options_sanitizer( $options ){
-
+	var_dump($options);
+	die();
 	return $options;
 }
 add_filter( 'bmag_sanitize_options', 'bmag_options_sanitizer' );
