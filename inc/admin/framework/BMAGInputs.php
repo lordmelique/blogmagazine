@@ -37,14 +37,15 @@ function bmag_options_validate( $input ){
 	 */
 	$bmag_tabnames = bmag_get_tab_names();
 
-	
-	
+
 	$input_task = explode( '-', $input['task'] );
+
 	/**
 	 * Action of settings form can be either reset or sumbit
 	 * @var [String]
 	 */
 	$action = $input_task[0];
+
 	/**
 	 * To which apply settings form action
 	 * can be either all or valid tabname
