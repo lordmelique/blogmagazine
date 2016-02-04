@@ -197,6 +197,26 @@ function bmag_get_tab_names(){
 
 
 /**
+ * Declare Globals for settings pages
+ */
+
+require_once( BMAG_DIR . '/inc/admin/settings/BMAGGeneralSettings.php' );
+$bmag_general_settings_page = new BMAGGeneralSettings();
+
+require_once( BMAG_DIR . '/inc/admin/settings/BMAGHomeSettings.php' );
+$bmag_home_settings_page = new BMAGHomeSettings();
+
+require_once( BMAG_DIR . '/inc/admin/settings/BMAGHeaderSettings.php' );
+$bmag_header_settings_page = new BMAGHeaderSettings();
+
+
+
+
+
+
+
+
+/**
  * Collects settings from all tabs into single settings array
  * settings blueprints are located in admin/settings
  */
@@ -204,15 +224,17 @@ function bmag_get_all_settings(){
 	
 	$settings_by_tabs = array();
 	$settings = array();
+	global $bmag_general_settings_page;
+	global $bmag_home_settings_page;
+	global $bmag_header_settings_page;
+	
+	$settings_by_tabs['general'] = $bmag_general_settings_page;
 
-	require_once( BMAG_DIR . '/inc/admin/settings/BMAGGeneralSettings.php' );
-	$settings_by_tabs['general'] = new BMAGGeneralSettings();
+	$settings_by_tabs['home'] = $bmag_home_settings_page;
 
-	require_once( BMAG_DIR . '/inc/admin/settings/BMAGHomeSettings.php' );
-	$settings_by_tabs['home'] = new BMAGHomeSettings();
+	$settings_by_tabs['header'] = $bmag_header_settings_page;
 
-	require_once( BMAG_DIR . '/inc/admin/settings/BMAGHeaderSettings.php' );
-	$settings_by_tabs['header'] = new BMAGHeaderSettings();
+	
 
 
 	foreach ( $settings_by_tabs as $tab ) {
@@ -243,6 +265,7 @@ function bmag_get_tab_defaults( $tabname ){
  * Returns default values of all settings in name => value pairs
  */
 function bmag_get_defaults(){
+
 	$settings = bmag_get_all_settings();
 	$defaults = array();
 	foreach ( $settings as $setting ) {
@@ -287,13 +310,22 @@ function bmag_section_callback(){
  */
 function bmag_field_callback( $option, $context = 'option', $opt_val ='', $meta = array() ) {
 	global $bmag_outputs;
-	if('custom' != $option['type']){
+	// if('custom' != $option['type']){
+	// 	$bmag_outputs->render_field( $option, $context, $opt_val, $meta );
+	// }else{
+	// 	$custom_function = 'custom_'.$option['name'];
+	// 	$bmag_outputs->$custom_function( $option, $context, $opt_val, $meta );
+	// }
+	$custom_flag = explode("__", $option['type']);
+	$custom_flag = $custom_flag[0];
+	if( 'custom' != $custom_flag ){
+
 		$bmag_outputs->render_field( $option, $context, $opt_val, $meta );
 	}else{
-		$custom_function = 'custom_'.$option['name'];
+		$custom_function = $option['type'];
 		$bmag_outputs->$custom_function( $option, $context, $opt_val, $meta );
 	}
-	
+
 }
 
 
@@ -444,6 +476,7 @@ function bmag_options_init() {
  * Refreshes options
  */
 function bmag_get_options() {
+
   global $bmag_options;
   bmag_options_init();/*refresh options*/
 

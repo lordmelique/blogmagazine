@@ -374,11 +374,11 @@ class themeUpdater{
 
   protected function json_to_string($val,$param_name, $args = array()){
     if(is_array($val)){
-      $this->options[$param_name] = implode("||wd||", $val);
+      $this->options[$param_name] = implode("||bmag||", $val);
     } else{
        $val = json_decode( $val , true );
        if( !is_null($val)){ 
-        $this->options[$param_name] = implode("||wd||", $val);
+        $this->options[$param_name] = implode("||bmag||", $val);
        }else{
       $this->options[$param_name] = $val;
      }

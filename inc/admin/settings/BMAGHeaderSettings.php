@@ -7,11 +7,11 @@ class BMAGHeaderSettings{
 	/*==========Constructor==========*/
 	public function __construct(){
 		$this->options = array( 
-
+			/* if type is starting with custom__ then callback must be seperate function */
 	      	'header_layout' => array( 
 	        'name' => 'header_layout', 
 	        'title' => __( 'Header Layout', 'bmag' ), 
-	        'type' => 'custom', 
+	        'type' => 'custom__header_layout_radio', 
 	        'description' => __( 'This is how your header would be displayed', 'bmag' ), 
 	        'show' => array(),
 	        'hide' => array(),
@@ -24,7 +24,7 @@ class BMAGHeaderSettings{
 	        ),
 	        'section' => 'header_layouting', 
 	        'tab' => $this->settings_tab, 
-	        'default' => false,
+	        'default' => 'style_1',
 	        'customizer' => array()
 	      ),
         );

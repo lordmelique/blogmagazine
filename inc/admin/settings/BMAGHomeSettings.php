@@ -39,7 +39,7 @@ class BMAGHomeSettings{
 	        ),
 	        'section' => 'home_section2',
 	        'tab' => $this->settings_tab,
-	        'default' => 'aaaaa',
+	        'default' => 'left-top',
 	        'customizer' => array() 
 	      )
         );

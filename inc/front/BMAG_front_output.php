@@ -16,7 +16,7 @@ class BMAG_front_output extends theme_front_output{
 			'url_pos' => 0
 			);
 		$args = wp_parse_args( $args, $defaults );
-		$parent_class = ($args['parent_class'] != '') ? ' class=' . $args['parent_class'] : '';
+		$parent_class = ($args['parent_class'] != '') ? ' class="' . esc_attr( $args['parent_class'] ).'"' : '';
 		$parent_id = ($args['parent_id'] != '') ? ' id=' . $args['parent_id'] : '';
 		echo "<". $args['parent_tag'] . $parent_id . $parent_class .'>' ;
 		foreach ( $args['items'] as $item ) {
@@ -42,12 +42,15 @@ class BMAG_front_output extends theme_front_output{
 				}
 				
 
-
+								
 				$class =  $class. ' ' . $font_awesome .'"';
 
-				if($class == ' class="' || $class='class=" "'){
+
+
+				if($class == ' class="' || $class=='class=" "'){
 					$class = "";
 				}
+
 				echo '<' . $tag . $class. '>';
 				$counter++;
 			}

@@ -232,7 +232,7 @@ var bmag_elements = {
 			}
 
 		},
-		delimiter: "||wd||",
+		delimiter: "||bmag||",
 		update: function(element, param_edited) {
 			switch (param_edited) {
 				case 'title':
@@ -509,7 +509,7 @@ var bmag_elements = {
 			}
 
 		},
-		delimiter: "||wd||",
+		delimiter: "||bmag||",
 		empty_str: function(n) {
 			empty_str = '';
 			for (var i = 0; i < n - 1; i++) {

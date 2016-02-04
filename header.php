@@ -56,7 +56,7 @@ $header_image = get_header_image();
 					'theme_location'  => 'top_menu_bar',
 					'menu'            => '',
 					'container'       => 'div',
-					'container_class' => '',
+					'container_class' => 'top-menu clearfix',
 					'container_id'    => '',
 					'menu_class'      => 'menu',
 					'menu_id'         => '',
@@ -73,52 +73,57 @@ $header_image = get_header_image();
 
 				$social_menu = array(
 					'parent_tag' => 'ul',
-					'parent_id' => '',
-					'parent_class' =>'',
-					'child_tag' => 'li.div.div.div.a',
-					'child_class'=> 'valodik hasmik qyababv.samsonchik tup',
+					'parent_id' => 'bmag_social',
+					'parent_class' =>'social float-right',
+					'child_tag' => 'li.a',
+					'child_class'=> 'top-social-item',
 					'items' => array(
 						array(
 							'font_awesome' => 'fa fa-facebook',
-							'name' => esc_html__('Facebook','bmag'),
+							'name' => esc_html__('','bmag'),
 							'url' => '#',
 							'custom_class' => '',
-							'url_pos' => 7
+							'url_pos' => 1
 							),
 						array(
 							'font_awesome' => 'fa fa-twitter',
-							'name' => esc_html__('Twitter','bmag'),
+							'name' => esc_html__('','bmag'),
 							'url' => '#',
 							'custom_class' => '',
-							'url_pos' => 7,
+							'url_pos' => 1,
 							),
 						array(
 							'font_awesome' => 'fa fa-vk',
-							'name' => esc_html__('Vkontakte','bmag'),
+							'name' => esc_html__('','bmag'),
 							'url' => '#',
 							'custom_class' => '',
-							'url_pos' => 7
+							'url_pos' => 1
 							),
 						array(
 							'font_awesome' => 'fa fa-instagram',
-							'name' => esc_html__('Instagram','bmag'),
+							'name' => esc_html__('','bmag'),
 							'url' => '#',
 							'custom_class' => '',
-							'url_pos' => 7
+							'url_pos' => 1
 							),
 						)
 					);
 				$bmag_front_output->display_custom_menu($social_menu);
 
 				?>
-					<ul class="social float-right">
-						<li><a href="#" class="fa fa-facebook"></a></li>
-						<li><a href="#" class="fa fa-twitter"></a></li>
-						<li><a href="#" class="fa fa-vk"></a></li>
-						<li><a href="#" class="fa fa-instagram"></a></li>
-					</ul>
+
 				</div>
 			</div>
+
+			<div class="header-body container clearfix">
+					<div class="site-logo">
+						<img src="http://www.joomlack.fr/images/stories/images/on-top-of-earth.jpg" alt="">
+					</div>
+					<div class="ad-wrapper">
+						<div class="advertisment">300x100</div>
+					</div>
+			</div>
+
 		</div>
 	</header><!-- #masthead -->
 

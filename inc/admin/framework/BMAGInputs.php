@@ -11,106 +11,159 @@
  *
  */
 function bmag_options_validate( $input ){
-
 	global $bmag_options;
-
-	// OPTIONS
-
+	
+	/**
+	 * Currently saved theme options
+	 * @var [String]
+	 */
 	$valid_input = $bmag_options;
+
+	/**
+	 * Theme default options array
+	 * @var [Array]
+	 */
 	$option_defaults = bmag_get_defaults();
 
-	// SETTINGS WITH ALL THEIR INFO
-
+	/**
+	 * All models of page settings 
+	 * @var [Array]
+	 */
 	$bmag_settings = bmag_get_all_settings();
 
-	// TABS
-
-	$bmag_tabs = bmag_get_tabs();
+	/**
+	 * Array of valid tab names
+	 * @var [Array]
+	 */
 	$bmag_tabnames = bmag_get_tab_names();
 
-	// INPUT TYPE
+	
 	
 	$input_task = explode( '-', $input['task'] );
-	$input_type = $input_task[0];	
-	$input_name = $input_task[1];
-	unset( $valid_input['task'] );
-
-	if ( 'reset' == $input_type ) {
-		if ( 'all' == $input_name ) {
+	/**
+	 * Action of settings form can be either reset or sumbit
+	 * @var [String]
+	 */
+	$action = $input_task[0];
+	/**
+	 * To which apply settings form action
+	 * can be either all or valid tabname
+	 * @var [String]
+	 */
+	$group = $input_task[1];
+	unset( $input['task'] );
+	
+	if ( 'reset' == $action ) {
+		if ( 'all' == $group ) {
 			return $option_defaults;
 		} else {
-			foreach ( $bmag_tabnames as $tab_name ) {
-				$tab_defaults = bmag_get_tab_defaults( $tab_name );
+			//if group is valid tabname then reset tab 
+			if( in_array( $group, $bmag_tabnames ) ){
+				$tab_defaults = bmag_get_tab_defaults( $group );
 				$valid_input = wp_parse_args( $tab_defaults, $valid_input );
-				return $valid_input;	
+				return $valid_input;
+			}else{
+				//if group name is not valid then keep settings
+				return $valid_input;
 			}
 		}
 	} else {
-		foreach ( $bmag_settings as $setting ) {
-			switch ($setting['type']) :
-				case 'color':
-					$valid_input[$setting] = bmag_param_clean($input[$setting], $valid_input[$setting], 'color', $sanitize_type);
-				break;
-				case 'colors':
-					/*to refresh colors of active theme in themes options*/
-					$select_theme = $input[$setting]['select_theme'];
-					$theme_index = isset($input[$setting]['active']) ? intval($input[$setting]['active']) : 0;
-					/*corresponding themes options*/
-					/*add to input params*/
-					$valid_input[$select_theme] = $valid_input[$select_theme];
-					$valid_input[$select_theme]['active'] = $theme_index;
-					/* save color values from color panel to option*/
-					foreach ($input[$setting]['colors'] as $color => $color_array) {
-					$input[$setting]['colors'][$color]['value'] = bmag_param_clean($color_array['value'], $valid_input[$setting]['colors'][$color]['value'], 'color');
-
-					/*also copy each color value to corresponding value in theme options array*/
-					$valid_input[$select_theme]['colors'][$theme_index][$color]['value'] = $input[$setting]['colors'][$color]['value'];
-					$valid_input[$select_theme]['colors'][$theme_index][$color]['default'] = $option_defaults[$select_theme]['colors'][$theme_index][$color]['default'];
-					$input[$setting]['colors'][$color]['default'] = $option_defaults[$select_theme]['colors'][$theme_index][$color]['default'];
-					}
-					$valid_input[$setting] = $input[$setting];
-				break;
-				case 'checkbox':
-				case 'checkbox_open':
-					$valid_input[$setting] = ( isset( $input[$setting] ) && $input[$setting]!=='false' && $input[$setting]!==false ? true : false );
-				break;
-				case 'radio':
-				case 'radio_open':
-					$valid_input[$setting] = ( array_key_exists( $input[$setting], $valid_options ) ? $input[$setting] : $valid_input[$setting] );
-				break;
-				case 'layout' :
-				case 'layout_open':
-					$valid_input[$setting] = $input[$setting];
-				break;
-				case 'select':
-				case 'select_open':
-				case 'select_style':
-					$valid_input[$setting] = bmag_param_clean($input[$setting], array(), 'select', $sanitize_type,'', $valid_options);
-					break;
-				case 'select_theme':
-					/*do nothing, the theme options are saved via color panel input (see case 'colors' in this switch)*/
-				break;
-				case 'text':
-				case 'textarea':
-				case 'upload_single':
-					$valid_input[$setting] = bmag_param_clean($input[$setting], '', 'text', $sanitize_type);
-				break;
-				case 'textarea_slider':
-				case 'text_slider':
-				case 'upload_multiple':
-					$valid_input[$setting] = bmag_param_clean($input[$setting], '', 'text_slider', $sanitize_type);
-				break;
-				case 'text_diagram':
-					$valid_input[$setting] = bmag_param_clean($input[$setting], '', 'text_diagram', $sanitize_type);
-					break;
-				default:
-					/*do nothing*/
-			endswitch;
+		if( 'all' == $group ){
+			//sanitize and submit all settings
+			$valid_input = bmag_validate_settings( $bmag_settings, $input, $valid_input );
+		} else {
+			//if group is valid tabname then 
+			if( in_array( $group, $bmag_tabnames ) ){
+				#sanitize only those settings which belong to group and then parse them with current settings and submit
+				$setting_name = 'bmag_' . $group . '_settings_page';
+				$tab_settings = $GLOBALS[ $setting_name ]->options; 
+				$valid_input = bmag_validate_settings( $tab_settings, $input, $valid_input );
+			}else{
+				//if group name is not valid then keep settings
+				return $valid_input;
+			}
 		}
 	}
 
-	return apply_filters( 'bmag_sanitize_options', $valid_input );
+	return apply_filters( 'bmag_options_validate', $valid_input );
 
+}
+
+/**
+ * Iterates on given settings array and changes correspondig values
+ * @param  [array] $bmag_settings [array of settings]
+ * @param  [array] $input         [array of user submitted settings]
+ * @param  [array] $valid_input   [current saved settings]
+ * @return [array]                [validated array of settings]
+ */
+function bmag_validate_settings( $bmag_settings, $input, $valid_input ){
+	foreach ($bmag_settings as $setting => $model) {
+		$sanitize_type = isset( $model['sanitize_type'] ) ? $model['sanitize_type'] : '';
+		$valid_options = isset( $model['valid_options'] ) ? $model['valid_options'] : false;
+		switch( $model['type'] ):
+			case "color":
+				$valid_input[ $setting ] = bmag_param_clean( $input[$setting ], $valid_input[ $setting ], 'color', $sanitize_type);
+				break;
+			case 'colors':
+				//TODO nayel sranq mi qich kaskaceli en erevum
+
+				/*to refresh colors of active theme in themes options*/
+				$select_theme = $input[ $setting ]['select_theme'];
+				$theme_index = isset($input[$setting]['active']) ? intval($input[$setting]['active']) : 0;
+				/*corresponding themes options*/
+				/*add to input params*/
+				$valid_input[$select_theme] = $valid_input[$select_theme];
+				$valid_input[$select_theme]['active'] = $theme_index;
+				/* save color values from color panel to option*/
+				foreach ($input[$setting]['colors'] as $color => $color_array) {
+				$input[$setting]['colors'][$color]['value'] = bmag_param_clean($color_array['value'], $valid_input[$setting]['colors'][$color]['value'], 'color');
+
+				/*also copy each color value to corresponding value in theme options array*/
+				$valid_input[$select_theme]['colors'][$theme_index][$color]['value'] = $input[$setting]['colors'][$color]['value'];
+				$valid_input[$select_theme]['colors'][$theme_index][$color]['default'] = $option_defaults[$select_theme]['colors'][$theme_index][$color]['default'];
+				$input[$setting]['colors'][$color]['default'] = $option_defaults[$select_theme]['colors'][$theme_index][$color]['default'];
+				}
+				$valid_input[$setting] = $input[$setting];
+				break;
+			case 'checkbox':
+	        case 'checkbox_open':
+	          $valid_input[$setting] = ( isset( $input[$setting] ) && $input[$setting]!=='false' && $input[$setting]!==false && $input[$setting] !== '0' ? true : false );
+	          break;
+	        case 'radio':
+	        case 'radio_open':
+	        case 'custom__header_layout_radio':
+		      $valid_input[$setting] = ( array_key_exists( $input[$setting], $valid_options ) ? $input[$setting] : $valid_input[$setting] );
+	          break;
+	        case 'layout' :
+	        case 'layout_open':
+	          $valid_input[$setting] = $input[$setting];
+	          break;
+	        case 'select':
+	        case 'select_open':
+	        case 'select_style':
+	          $valid_input[$setting] = bmag_param_clean($input[$setting], array(), 'select', $sanitize_type,'', $valid_options);
+	          break;
+	        case 'select_theme':
+	        /* do nothing, the theme options are saved via color panel input (see case 'colors' in this switch)*/
+	          break;
+	        case 'text':
+	        case 'textarea':
+	        case 'upload_single':
+	          $valid_input[$setting] = bmag_param_clean($input[$setting], '', 'text', $sanitize_type);
+	          break;
+	        case 'textarea_slider':
+	        case 'text_slider':
+	        case 'upload_multiple':
+	          $valid_input[$setting] = bmag_param_clean($input[$setting], '', 'text_slider', $sanitize_type);
+	          break;
+	        case 'text_diagram':
+	          $valid_input[$setting] = bmag_param_clean($input[$setting], '', 'text_diagram', $sanitize_type);
+	          break;
+	        default:
+	          /*do nothing*/
+	      endswitch;
+		}
+		return $valid_input;
 }
 
 /**
@@ -153,7 +206,7 @@ function bmag_param_clean($input, $default = false, $param_type, $sanitize_type 
 	$allowed_slider_desc_html = apply_filters( 'wp_kses_allowed_html', "", "allowed_slider_desc_html" );
 	$allowed_custom_head = apply_filters( 'wp_kses_allowed_html', "", "allowed_custom_head" );
 
-	$delimiter = '||wd||';
+	$delimiter = '||bmag||';
 
 	switch ($param_type) :
 	case "color" :
@@ -368,6 +421,6 @@ class BMAG_customizer_sanitizer {
 	return $input;
 	}
 	static function delimiter(){
-	return "||wd||";
+	return "||bmag||";
 	}
 }

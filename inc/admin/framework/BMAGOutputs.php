@@ -174,7 +174,7 @@ class BMAGOutputs{
 		} 
 	
 
-		$toggleClass = ($opt_val == 'on') ? 'fa-toggle-on' : 'fa-toggle-on fa-rotate-180';
+		$toggleClass = ($opt_val || $opt_val == 'on') ? 'fa-toggle-on' : 'fa-toggle-on fa-rotate-180';
 		?>
 		<div class="bmag_param" id="bmag_wrap_<?php echo $element['name']; ?>">
 			<div class="block margin">
@@ -225,7 +225,7 @@ class BMAGOutputs{
 			$opt_val = $opt_val ? 'true' : '';
 		} 
 
-		$toggleClass = ($opt_val == 'on') ? 'fa-toggle-on' : 'fa-toggle-on fa-rotate-180';
+		$toggleClass = ($opt_val || $opt_val == 'on') ? 'fa-toggle-on' : 'fa-toggle-on fa-rotate-180';
 
 		?>
 		<div class="bmag_param" id="bmag_wrap_<?php echo $element['name']; ?>">
@@ -1305,7 +1305,7 @@ class BMAGOutputs{
 	/**
 	* custom input type callbacks
 	*/
-	public function custom_header_layout( $element, $context = 'option', $opt_val = '', $meta=array()){
+	public function custom__header_layout_radio( $element, $context = 'option', $opt_val = '', $meta=array()){
 		$i = 1;
 		if($context== 'meta'){
 			$optionname = BMAG_META.'[' .$element['name']. ']';
