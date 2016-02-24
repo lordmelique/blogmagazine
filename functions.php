@@ -60,8 +60,8 @@ function bmag_setup() {
 
 	// This theme uses wp_nav_menu() in one location.
 	register_nav_menus( array(
-		'primary' => esc_html__( 'Primary Menu', 'bmag' ),
-		'top_menu_bar' => esc_html__( 'Top Menu Bar','bmag' )
+		'bmag_primary' => esc_html__( 'Primary Menu', 'bmag' ),
+		'bmag_top' => esc_html__( 'Top Menu Bar','bmag' )
 	) );
 
 	/*
@@ -136,13 +136,17 @@ add_action( 'widgets_init', 'bmag_widgets_init' );
  */
 function bmag_scripts() {
 
+	wp_enqueue_script('jquery');
+
 	wp_enqueue_style( 'bmag-font-awesome', BMAG_URL . '/inc/css/font-awesome/font-awesome.css',array(), BMAG_VERSION);
 
 	wp_enqueue_style( 'bmag-style', get_stylesheet_uri() );
 
-	wp_enqueue_script( 'bmag-navigation', get_template_directory_uri() . '/js/navigation.js', array(), '20120206', true );
+	wp_enqueue_script( 'bmag-navigation', BMAG_URL . '/js/navigation.js', array(), BMAG_VERSION, true );
 
-	wp_enqueue_script( 'bmag-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20130115', true );
+	wp_enqueue_script( 'bmag-skip-link-focus-fix', BMAG_URL . '/js/skip-link-focus-fix.js', array(), BMAG_VERSION, true );
+
+	wp_enqueue_script( 'bmag-frontend', BMAG_URL . '/js/BMAGFrontend.js', array('jquery'), BMAG_VERSION);
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );

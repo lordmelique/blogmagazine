@@ -171,10 +171,20 @@ function bmag_get_tabs(){
 		'name' => 'header',
 		'title' => __( 'Header', 'bmag' ),
 		'sections' => array(
-		  'header_layouting' => array(
-			'name' => 'header_layouting',
-			'title' => __( 'Layout', 'bmag' ),
-			'description' => 'Here you can change how header can be changed'
+		  'general' => array(
+			'name' => 'general',
+			'title' => __( 'General Settings', 'bmag' ),
+			'description' => 'Here you can change some general settings'
+		  ),
+		  'top_menu' => array(
+		  	'name' => 'top_menu',
+			'title' => __( 'Top Menu', 'bmag' ),
+			'description' => 'Here you can customize theme top menu'
+		  ),
+		  'primary_menu' => array(
+		  	'name' => 'primary_menu',
+			'title' => __( 'Primary Menu', 'bmag' ),
+			'description' => 'Here you can customize primary menu'
 		  ),
 		),
 		'icon' => 'fa fa-header',
